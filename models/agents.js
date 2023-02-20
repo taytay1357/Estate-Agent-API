@@ -7,12 +7,14 @@ exports.getById = async function getById(id) {
   return data;
 }
 
-exports.getAll = async function getAll (page, limit, order) {
-  let query = "SELECT agents* FROM agents;";
-  let data = await db.run_query(query);
+
+exports.getAll = async function getAll (page=1, limit=10, order) {
+  const offset = (page-1) * limit;
+  let query = "SELECT * FROM agents LIMIT ?,?;";
+  let data = await db.run_query(query, [offset, limit]);
   return data;
 
-}
+}agents
 
 exports.add = async function add (agent) {
   let query = "INSERT INTO agents SET ?";

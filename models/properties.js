@@ -7,13 +7,14 @@ exports.getById = async function getById(id) {
   return data;
 }
 
-exports.getAll = async function getAll (page, limit, order) {
-  let query = "SELECT * FROM properties;";
-  let data = await db.run_query(query);
+
+exports.getAll = async function getAll (page=1, limit=10, order) {
+  const offset = (page-1) * limit;
+  let query = "SELECT * FROM properties LIMIT ?,?;";
+  let data = await db.run_query(query, [offset, limit]);
   return data;
 
 }
-
 exports.add = async function add (property) {
   let query = "INSERT INTO properties SET ?";
   let data = await db.run_query(query, property);
