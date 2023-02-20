@@ -14,7 +14,7 @@ exports.getAll = async function getAll (page=1, limit=10, order) {
   let data = await db.run_query(query, [offset, limit]);
   return data;
 
-}agents
+}
 
 exports.add = async function add (agent) {
   let query = "INSERT INTO agents SET ?";
