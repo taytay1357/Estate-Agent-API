@@ -16,20 +16,20 @@ exports.getAll = async function getAll (page=1, limit=10, order) {
 
 }
 
-exports.add = async function add (agent) {
+exports.add = async function createAgent (agent) {
   let query = "INSERT INTO agents SET ?";
   let data = await db.run_query(query, agent);
   return data;
 }
 
-exports.update = async function update (agent, id) {
+exports.update = async function updateAgent (agent, id) {
   let query = "UPDATE agents SET ? WHERE ID= ?;"
   let values = [agent, id]
   let data = await run_query(query, values);
   return data;
-}agent
+}
 
-exports.delete = async function delete(id) {
+exports.delete = async function deleteAgent(id) {
   let query = "DELETE FROM agents WHERE ID= ?;"
   let values = [id]
   let data = await run_query(query, values);

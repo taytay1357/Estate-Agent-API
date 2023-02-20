@@ -20,9 +20,11 @@ const app = new Koa();
 const users = require('./routes/users.js');
 const agents = require('./routes/agents.js');
 const properties = require('./routes/properties.js');
+const special = require('./routes/special.js')
 app.use(users.routes())
 app.use(agents.routes());
 app.use(properties.routes());
+app.use(special.routes());
 
 //Finally, run the app as a process on a given port
 

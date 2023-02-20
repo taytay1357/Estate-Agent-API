@@ -56,7 +56,7 @@ async function updateUser(cnx) {
 
 
 
-async function deleteArticle(cnx) {
+async function deleteUser(cnx) {
   //first get the id of the article we want to delete
   let id = cnx.params.id
   let result = await model.delete(id)

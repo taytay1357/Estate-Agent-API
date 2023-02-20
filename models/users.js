@@ -31,9 +31,15 @@ exports.update = async function update (user, id) {
   return data;
 }
 
-exports.delete = async function delete(id) {
+exports.delete = async function deleteUser(id) {
   let query = "DELETE FROM users WHERE ID= ?;"
   let values = [id]
   let data = await run_query(query, values);
   return data;
+}
+
+exports.findByUsername = async function getByUsername(username) {
+  const query = "SELECT * FROM users WHERE username = ?;";
+  const user = await db.run_query(query, username);
+  return user;
 }

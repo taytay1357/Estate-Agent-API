@@ -2,7 +2,7 @@ const Router = require('koa-router')
 //we will parse request bodies using koa-bodyparser
 
 const model = require('../models/agents');
-const bodyParser = require('koa-bodyparser')
+const bodyParser = require('koa-bodyparser');
 
 const router = Router({prefix: '/api/vl/agents'});
 
@@ -56,7 +56,7 @@ async function updateAgent(cnx) {
 
 
 
-async function deleteArticle(cnx) {
+async function deleteAgent(cnx) {
   //first get the id of the article we want to delete
   let id = cnx.params.id
   let result = await model.delete(id)
