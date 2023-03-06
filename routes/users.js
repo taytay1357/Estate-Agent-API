@@ -4,8 +4,9 @@ const Router = require('koa-router')
 const model = require('../models/users');
 const bodyParser = require('koa-bodyparser')
 const passwordUtils = require('../helpers/passwordHelpers')
+const jwtUtils = require('../helpers/jsonwebtoken')
 
-const router = Router({prefix: '/api/vl/users'});
+const router = Router({prefix: '/api/v1/users'});
 
 
 router.get('/', getAll);
@@ -14,18 +15,11 @@ router.post('/', bodyParser(), createUser);
 router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), updateUser);
 router.del('/:id([0-9]{1,})', deleteUser);
-router.get('/protected', userProtected)
-router.post('/login', userLogin)
+router.get('/protected')
+router.post('/login')
 
 
 //Now we define handler functions used above.
-
-async function userRegister(cnx, res, next) {
-  const saltHash = passwordUtils.genPassword(cnx.body.password)
-
-  const salt = saltHash.salt;
-  const hash = saltHash.hash;
-}
 
 async function getAll(cnx) {
   let users = await model.getAll()
@@ -39,7 +33,7 @@ async function getById(cnx) {
   let id = cnx.params.id
   let users = await model.getById(id);
   if (users.length) {
-    ctx.body = users[0];
+    cnx.body = users[0];
   }
 }
 
@@ -52,13 +46,15 @@ async function createUser(cnx) {
   const hash = saltHash.hash;
 
   body.password = hash;
-  body.password_salt = salt;
+  body.passwordSalt = salt;
 
 
   let result = await model.add(body)
   if (result) {
-    cnx.status = 201;
-    cnx.body = {ID: result.insertId}
+    const jwt = jwtUtils.issueJWT(result)
+    cnx.body = { success: true, user: result, token: jwt.token, expiresIn: jwt.expires}
+  }  else {
+    cnx.body = { success: false }
   }
 }
 
@@ -82,7 +78,7 @@ async function deleteUser(cnx) {
   let id = cnx.params.id
   let result = await model.delete(id)
   if (result) {
-    ctx.status = 201;
+    cnx.status = 201;
   }
 }
 

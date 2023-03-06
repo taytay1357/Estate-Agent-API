@@ -17,11 +17,14 @@ exports.getAll = async function getAll (page=1, limit=10, order) {
 
 exports.add = async function add (user) {
   if (user.username != "admin"){
-    user.role = 0
+    user.roleID = 1
   }
   let query = "INSERT INTO users SET ?";
   let data = await db.run_query(query, user);
-  return data;
+  query = "SELECT * FROM users WHERE username= ?";
+  let values = [user.username]
+  data = await db.run_query(query, values)
+  return data
 }
 
 exports.update = async function update (user, id) {

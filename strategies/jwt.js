@@ -5,7 +5,7 @@ const path = require('path')
 
 const opts = {}
 
-const pathToKey = path.join(__dirname, '..', 'pub_key.pem')
+const pathToKey = path.join(__dirname, '../helpers/', 'pub_key.pem')
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8')
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
