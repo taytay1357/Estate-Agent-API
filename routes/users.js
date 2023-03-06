@@ -16,7 +16,7 @@ router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), updateUser);
 router.del('/:id([0-9]{1,})', deleteUser);
 router.get('/protected')
-router.post('/login')
+router.post('/login', bodyParser(), userLogin)
 
 
 //Now we define handler functions used above.
@@ -54,8 +54,36 @@ async function createUser(cnx) {
     const jwt = jwtUtils.issueJWT(result)
     cnx.body = { success: true, user: result, token: jwt.token, expiresIn: jwt.expires}
   }  else {
-    cnx.body = { success: false }
+    cnx.body = { success: false, msg: "could not create a user with these credentials" }
   }
+}
+
+async function userLogin(cnx) {
+  
+  const body = cnx.request.body;
+  let username = body.username;
+  let user = await model.findByUsername(username)
+
+  if (!user) {
+    cnx.status = 401;
+    cnx.body = { success: false, msg: "could not find user"}
+  }
+
+  user = user[0]
+
+  const isValid = passwordUtils.validPassword(body.password, user.password, user.passwordSalt);
+
+  if (isValid) {
+    const tokenObject = jwtUtils.issueJWT(user);
+
+    cnx.status = 201;
+    cnx.body = { success: true, user: user, token: tokenObject.token, expiresIn: tokenObject.expires }
+  } else {
+    cnx.status = 401;
+    cnx.body = { success: false, msg: "you entered the wrong password"}
+  }
+
+
 }
 
 async function updateUser(cnx) {
