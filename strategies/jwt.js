@@ -5,7 +5,7 @@ const path = require('path')
 
 const opts = {}
 
-const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem')
+const pathToKey = path.join(__dirname, '..', 'pub_key.pem')
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8')
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -24,10 +24,13 @@ const strategy = new JwtStrategy(opts, async (payload, done)  => {
       result = await users.findByUsername(username);
    } catch (error) {
       console.log(`Error during authentication for user ${username}`);
-      return done(error)
+      return done(error, null)
   }
    if (result.length) {
       const user = result[0]
+      return done(null, user)
+   } else {
+      return done(null, false)
    }
 })
 

@@ -5,9 +5,23 @@ const PRIV_KEY = fs.readFileSync(__dirname + '/priv_key.pem', 'utf8');
 const PUB_KEY = fs.readFileSync(__dirname + '/pub_key.pem', 'utf8');
 
 
-function issueJWT(payloadObj) {
-   const signedJWT = jwt.sign(payloadObj, PRIV_KEY, {algorithm: 'RS256'});
-   return signedJWT;
+function issueJWT(user) {
+   const id = user.id
+
+   const expiresIn = '1d';
+
+   const payloadObj = {
+      sub: id,
+      iat: Date.now()
+   };
+
+   const signedJWT = jwt.sign(payloadObj, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256'});
+
+   return {
+      token: "Bearer " + signedJWT,
+      expires: expiresIn
+   }
+   
 }
 
 
@@ -21,4 +35,6 @@ function verifyJWT(signedJWT) {
    });
 }
 
-export default verifyJWT, issueJWT;
+module.exports.verifyJWT = verifyJWT;
+module.exports.issueJWT = issueJWT;
+

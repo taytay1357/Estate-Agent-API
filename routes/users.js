@@ -3,6 +3,7 @@ const Router = require('koa-router')
 
 const model = require('../models/users');
 const bodyParser = require('koa-bodyparser')
+const passwordUtils = require('../helpers/passwordHelpers')
 
 const router = Router({prefix: '/api/vl/users'});
 
@@ -13,8 +14,18 @@ router.post('/', bodyParser(), createUser);
 router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), updateUser);
 router.del('/:id([0-9]{1,})', deleteUser);
+router.get('/protected', userProtected)
+router.post('/login', userLogin)
+
 
 //Now we define handler functions used above.
+
+async function userRegister(cnx, res, next) {
+  const saltHash = passwordUtils.genPassword(cnx.body.password)
+
+  const salt = saltHash.salt;
+  const hash = saltHash.hash;
+}
 
 async function getAll(cnx) {
   let users = await model.getAll()
@@ -33,11 +44,21 @@ async function getById(cnx) {
 }
 
 async function createUser(cnx) {
-  const body = ctx.request.body;
+  
+  const body = cnx.request.body;
+  const saltHash = passwordUtils.genPassword(body.password)
+
+  const salt = saltHash.salt;
+  const hash = saltHash.hash;
+
+  body.password = hash;
+  body.password_salt = salt;
+
+
   let result = await model.add(body)
   if (result) {
-    ctx.status = 201;
-    ctx.body = {ID: result.insertId}
+    cnx.status = 201;
+    cnx.body = {ID: result.insertId}
   }
 }
 
@@ -49,8 +70,8 @@ async function updateUser(cnx) {
   let updatedUser = {username: username, email: email, firstName: first, lastName: last, avatarURL: avatarURL}
   let result = await model.update(updatedUser, id)
   if (result) {
-    ctx.status = 201;
-    ctx.body = {ID: result.insertId}
+    cnx.status = 201;
+    cnx.body = {ID: result.insertId}
   }
 }
 
