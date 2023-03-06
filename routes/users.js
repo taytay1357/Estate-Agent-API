@@ -5,6 +5,7 @@ const model = require('../models/users');
 const bodyParser = require('koa-bodyparser')
 const passwordUtils = require('../helpers/passwordHelpers')
 const jwtUtils = require('../helpers/jsonwebtoken')
+const auth = require('../controllers/auth')
 
 const router = Router({prefix: '/api/v1/users'});
 
@@ -15,7 +16,7 @@ router.post('/', bodyParser(), createUser);
 router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), updateUser);
 router.del('/:id([0-9]{1,})', deleteUser);
-router.get('/protected')
+router.get('/protected', auth, protected)
 router.post('/login', bodyParser(), userLogin)
 
 
@@ -35,6 +36,11 @@ async function getById(cnx) {
   if (users.length) {
     cnx.body = users[0];
   }
+}
+
+async function protected(cnx) {
+
+  cnx.body = { success: true, msg: "You are authorized!"}
 }
 
 async function createUser(cnx) {

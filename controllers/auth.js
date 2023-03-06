@@ -7,6 +7,7 @@ const jwtAuth = require('../strategies/jwt')
 
 passport.use(jwtAuth);
 
-module.exports = passport.authenticate('jwt', {session:false}), function(req, res) {
-  res.send(req.user.profile);
+module.exports = passport.authenticate('jwt', { session:false }), (req, res) => {
+  res.status = 201;
+  res.body = { success: true, msg: "You are authorized!"};
 };

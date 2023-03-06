@@ -6,7 +6,7 @@ const PUB_KEY = fs.readFileSync(__dirname + '/pub_key.pem', 'utf8');
 
 
 function issueJWT(user) {
-   const id = user.id
+   const id = user.ID
 
    const expiresIn = '1d';
 
