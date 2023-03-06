@@ -1,4 +1,4 @@
 /node_modules
 /config.js
-/estate-front/helpers/priv_key.pem
-/estate-front/helpers/pub_key.pem
+/helpers/priv_key.pem
+/helpers/pub_key.pem
