@@ -7,7 +7,7 @@ const passwordUtils = require('../helpers/passwordHelpers');
 const jwtUtils = require('../helpers/jsonwebtoken');
 const auth = require('../controllers/auth');
 const {validateUser, validateLogin} = require('../controllers/validation');
-
+const can = require('../permissions/users');
 const router = Router({prefix: '/api/v1/users'});
 
 
@@ -24,10 +24,22 @@ router.post('/login', bodyParser(), validateLogin, userLogin)
 //Now we define handler functions used above.
 
 async function getAll(cnx) {
-  let users = await model.getAll()
-  if (users.length) {
-    cnx.body = users;
+  //because of using jwt we need to decrypt the payload and get the admin value
+  //of the user to use for authorization
+  console.log(cnx)
+  const jwt = cnx.request.header.authorization;
+  const payload = jwtUtils.decodeJWT(jwt)
+  console.log(payload)
+  const permission = can.readAll(cnx.state.user);
+  if (!permission.granted) {
+    cnx.status = 403;
+  } else {
+    let users = await model.getAll()
+    if (users.length) {
+      cnx.body = users;
+    }
   }
+  
   
 }
 async function getById(cnx) {
@@ -68,16 +80,16 @@ async function createUser(cnx) {
 async function userLogin(cnx) {
   
   const body = cnx.request.body;
+  console.log(body)
   let username = body.username;
   let user = await model.findByUsername(username)
 
-  if (!user) {
+  if (!user || user === undefined) {
     cnx.status = 401;
     cnx.body = { success: false, msg: "could not find user"}
   }
 
   user = user[0]
-
   const isValid = passwordUtils.validPassword(body.password, user.password, user.passwordSalt);
 
   if (isValid) {
