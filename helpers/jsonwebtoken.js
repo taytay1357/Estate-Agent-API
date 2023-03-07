@@ -7,17 +7,14 @@ const PUB_KEY = fs.readFileSync(__dirname + '/pub_key.pem', 'utf8');
 
 
 function issueJWT(user) {
+   console.log(user)
    const id = user.ID
    let admin;
    const expiresIn = '1d';
-   if (user.roleID == 2) {
-      admin = true;
-   } else {
-      admin = false;
-   }
+   
    const payloadObj = {
       sub: id,
-      admin: admin,
+      role: user.role,
       iat: Date.now()
    };
 
@@ -45,7 +42,7 @@ function decodeJWT(signedJWT) {
    const payload = signedJWT.split('.')[1];
    //now decode it
    const parseJWT = JSON.parse(Buffer.from(payload, 'base64').toString());
-   console.log(parseJWT);
+   return parseJWT
 }
 
 module.exports.verifyJWT = verifyJWT;

@@ -26,11 +26,9 @@ router.post('/login', bodyParser(), validateLogin, userLogin)
 async function getAll(cnx) {
   //because of using jwt we need to decrypt the payload and get the admin value
   //of the user to use for authorization
-  console.log(cnx)
   const jwt = cnx.request.header.authorization;
   const payload = jwtUtils.decodeJWT(jwt)
-  console.log(payload)
-  const permission = can.readAll(cnx.state.user);
+  const permission = can.readAll(payload);
   if (!permission.granted) {
     cnx.status = 403;
   } else {

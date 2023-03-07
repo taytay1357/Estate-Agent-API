@@ -12,11 +12,10 @@ ac.grant('admin').execute('read').on('users');
 ac.grant('admin').execute('update').on('user');
 ac.grant('admin').condition({Fn: 'NOT_EQUALS', args: {'requester': '$.owner'}}).execute('delete').on('user');
 
-exports.readAll = (requester) => {
-   
+exports.readAll = (requester) =>
    ac.can(requester.role).execute('read').sync().on('users');
+
    
-}
 exports.read = (requester, data) =>
    ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('read').sync().on('user');
 

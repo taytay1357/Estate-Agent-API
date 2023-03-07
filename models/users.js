@@ -17,7 +17,9 @@ exports.getAll = async function getAll (page=1, limit=10, order) {
 
 exports.add = async function add (user) {
   if (user.username != "admin"){
-    user.roleID = 1
+    user.role = "user"
+  } else {
+    user.role = "admin"
   }
   let query = "INSERT INTO users SET ?";
   let data = await db.run_query(query, user);
