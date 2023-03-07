@@ -14,9 +14,9 @@ const router = Router({prefix: '/api/v1/users'});
 router.get('/', getAll);
 router.post('/', bodyParser(), validateUser, createUser);
 
-router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), validateUser, updateUser);
-router.del('/:id([0-9]{1,})', deleteUser);
+router.get('/:id([0-9]{1,})', auth ,getById);
+router.put('/:id([0-9]{1,})', bodyParser(), auth , validateUser, updateUser);
+router.del('/:id([0-9]{1,})', auth , deleteUser); 
 router.get('/protected', auth, protected)
 router.post('/login', bodyParser(), validateLogin, userLogin)
 
@@ -42,11 +42,19 @@ async function getAll(cnx) {
 }
 async function getById(cnx) {
   //Get the ID from the route parameters.
+  const jwt = cnx.request.header.authorization;
+  const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   let users = await model.getById(id);
-  if (users.length) {
-    cnx.body = users[0];
+  const permission = can.read(payload, users[0]);
+  if (!permission.granted) {
+    cnx.status = 403;
+  } else {
+    if (users.length) {
+      cnx.body = users[0];
+    }
   }
+  
 }
 
 async function protected(cnx) {
@@ -78,7 +86,7 @@ async function createUser(cnx) {
 async function userLogin(cnx) {
   
   const body = cnx.request.body;
-  console.log(body)
+
   let username = body.username;
   let user = await model.findByUsername(username)
 
@@ -105,14 +113,23 @@ async function userLogin(cnx) {
 
 async function updateUser(cnx) {
   //first of all get the id of the article
+  const jwt = cnx.request.header.authorization;
+  const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
-  //receive request body and assign it to a new article variable
-  let {username, email, first, last, avatarURL} = cnx.request.body;
-  let updatedUser = {username: username, email: email, firstName: first, lastName: last, avatarURL: avatarURL}
-  let result = await model.update(updatedUser, id)
-  if (result) {
-    cnx.status = 201;
-    cnx.body = {ID: result.insertId}
+  id = parseInt(id);
+  const user = {ID: id};
+  const permission = can.update(payload, user);
+  if (!permission.granted){
+    cnx.status = 403;
+  } else {
+    //receive request body and assign it to a new article variable
+    let {username, email, first, last, avatarURL, password} = cnx.request.body;
+    let updatedUser = {username: username, email: email, firstName: first, lastName: last, avatarURL: avatarURL, password: password}
+    let result = await model.update(updatedUser, id)
+    if (result) {
+      cnx.status = 201;
+      cnx.body = {msg: "record has been updated"}
+    }
   }
 }
 
@@ -120,10 +137,20 @@ async function updateUser(cnx) {
 
 async function deleteUser(cnx) {
   //first get the id of the article we want to delete
+  const jwt = cnx.request.header.authorization;
+  const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
-  let result = await model.delete(id)
-  if (result) {
-    cnx.status = 201;
+  id = parseInt(id)
+  const user = {ID: id};
+  const permission = can.delete(payload, user);
+  if (!permission.granted){
+    cnx.status = 403;
+  } else {
+    let result = await model.delete(id)
+    if (result) {
+      cnx.status = 201;
+      cnx.body = {msg: "record has been deleted"}
+    }
   }
 }
 

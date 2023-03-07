@@ -17,10 +17,10 @@ exports.readAll = (requester) =>
 
    
 exports.read = (requester, data) =>
-   ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('read').sync().on('user');
+   ac.can(requester.role).context({requester:requester.sub, owner:data.ID}).execute('read').sync().on('user');
 
-exports.update = (requester, data) =>
-   ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('update').sync().on('user');
+exports.update = (requester, data) => 
+   ac.can(requester.role).context({requester:requester.sub, owner:data.ID}).execute('update').sync().on('user');
 
 exports.delete = (requester, data) =>
-   ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('delete').sync().on('user')
+   ac.can(requester.role).context({requester:requester.sub, owner:data.ID}).execute('delete').sync().on('user')
