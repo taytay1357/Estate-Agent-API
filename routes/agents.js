@@ -3,15 +3,15 @@ const Router = require('koa-router')
 
 const model = require('../models/agents');
 const bodyParser = require('koa-bodyparser');
-
-const router = Router({prefix: '/api/vl/agents'});
+const {validateAgent} = require('../controllers/validation')
+const router = Router({prefix: '/api/v1/agents'});
 
 
 router.get('/', getAll);
-router.post('/', bodyParser(), createAgent);
+router.post('/', bodyParser(), validateAgent ,createAgent);
 
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), updateAgent);
+router.put('/:id([0-9]{1,})', bodyParser(), validateAgent, updateAgent);
 router.del('/:id([0-9]{1,})', deleteAgent);
 
 //Now we define handler functions used above.

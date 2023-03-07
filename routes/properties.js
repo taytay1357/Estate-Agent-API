@@ -3,15 +3,15 @@ const Router = require('koa-router')
 
 const model = require('../models/properties');
 const bodyParser = require('koa-bodyparser')
-
-const router = Router({prefix: '/api/vl/properties'});
+const {validateProperty} = require('../controllers/validation')
+const router = Router({prefix: '/api/v1/properties'});
 
 
 router.get('/', getAll);
-router.post('/', bodyParser(), createProperty);
+router.post('/', bodyParser(), validateProperty ,createProperty);
 
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), updateProperty);
+router.put('/:id([0-9]{1,})', bodyParser(), validateProperty ,updateProperty);
 router.del('/:id([0-9]{1,})', deleteProperty);
 
 //Now we define handler functions used above.
@@ -28,16 +28,16 @@ async function getById(cnx) {
   let id = cnx.params.id
   let users = await model.getById(id);
   if (users.length) {
-    ctx.body = users[0];
+    cnx.body = users[0];
   }
 }
 
 async function createProperty(cnx) {
-  const body = ctx.request.body;
+  const body = cnx.request.body;
   let result = await model.add(body)
   if (result) {
-    ctx.status = 201;
-    ctx.body = {ID: result.insertId}
+    cnx.status = 201;
+    cnx.body = {ID: result.insertId}
   }
 }
 
@@ -49,8 +49,8 @@ async function updateProperty(cnx) {
   let updatedProperty = {type: type, price: price, address: address, bedrooms: bedrooms, bathrooms: bathrooms, agentId: agentId, imageURL: imageURL, description: description}
   let result = await model.update(updatedProperty, id)
   if (result) {
-    ctx.status = 201;
-    ctx.body = {ID: result.insertId}
+    cnx.status = 201;
+    cnx.body = {ID: result.insertId}
   }
 }
 
@@ -61,7 +61,7 @@ async function deleteProperty(cnx) {
   let id = cnx.params.id
   let result = await model.delete(id)
   if (result) {
-    ctx.status = 201;
+    cnx.status = 201;
   }
 }
 
