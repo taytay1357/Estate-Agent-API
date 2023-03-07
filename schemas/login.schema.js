@@ -2,7 +2,7 @@ module.exports = {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "id": "/users",
       "title": "User",
-      "description": "A user in the API",
+      "description": "Login route so only requires username and password",
       "type": "object",
       "properties": {
          "firstName": {
@@ -35,5 +35,5 @@ module.exports = {
          },
          
       },
-      "required": ["firstName", "username", "password", "lastName", "email"]
+      "required": ["username", "password"]
    }

@@ -6,7 +6,7 @@ const bodyParser = require('koa-bodyparser');
 const passwordUtils = require('../helpers/passwordHelpers');
 const jwtUtils = require('../helpers/jsonwebtoken');
 const auth = require('../controllers/auth');
-const {validateUser} = require('../controllers/validation');
+const {validateUser, validateLogin} = require('../controllers/validation');
 
 const router = Router({prefix: '/api/v1/users'});
 
@@ -18,7 +18,7 @@ router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), validateUser, updateUser);
 router.del('/:id([0-9]{1,})', deleteUser);
 router.get('/protected', auth, protected)
-router.post('/login', bodyParser(), validateUser, userLogin)
+router.post('/login', bodyParser(), validateLogin, userLogin)
 
 
 //Now we define handler functions used above.

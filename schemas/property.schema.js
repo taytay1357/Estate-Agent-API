@@ -29,17 +29,10 @@
             "description": "the id of the agent that owns the property",
             "type": "integer"
          },
-         "imageURL": {
-            "description": "URL for the main image for the property",
-            "type": "uri"
-         },
+
          "description": {
             "description": "short description about the property",
             "type": "string"
-         },
-         "datePublished": {
-            "description": "the date the property was published onto the API",
-            "type": "integer"
          },
       },
       "required": ["type", "price", "address", "bedrooms", "bathrooms"]

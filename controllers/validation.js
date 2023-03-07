@@ -2,6 +2,7 @@ const {Validator, ValidationError} = require('jsonschema');
 const propertySchema = require('../schemas/property.schema.js');
 const agentSchema = require('../schemas/agents.schema.js');
 const userSchema = require('../schemas/users.schema.js');
+const loginSchema = require('../schemas/login.schema.js');
 const v = new Validator();
 
 exports.validateProperty = async (ctx, next) => {
@@ -59,6 +60,28 @@ exports.validateUser = async (ctx, next) => {
 
    try {
       v.validate(body, userSchema, validationOptions);
+      await next();
+   } catch(error) {
+      if (error instanceof ValidationError) {
+         ctx.body = error;
+         ctx.status = 400;
+      } else {
+         throw error;
+      }
+   }
+}
+
+exports.validateLogin = async (ctx, next) => {
+
+   const validationOptions = {
+      throwError: true,
+      allowUnknownAttributes: false
+   };
+
+   const body = ctx.request.body;
+
+   try {
+      v.validate(body, loginSchema, validationOptions);
       await next();
    } catch(error) {
       if (error instanceof ValidationError) {
