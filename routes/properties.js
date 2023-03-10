@@ -12,7 +12,7 @@ router.get('/', getAll);
 router.post('/', bodyParser(), validateProperty ,createProperty);
 
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), validateProperty ,updateProperty);
+router.put('/:id([0-9]{1,})', bodyParser(), validateProperty , updateProperty);
 router.del('/:id([0-9]{1,})', deleteProperty);
 
 //Now we define handler functions used above.
@@ -35,19 +35,24 @@ async function getById(cnx) {
 
 async function createProperty(cnx) {
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt);
-  const permission = can.create(payload);
-  if (!permission.granted) {
-    cnx.status = 403;
-  } else {
-    const body = cnx.request.body;
-    body.agentID = payload.sub
-    let result = await model.add(body)
-    if (result) {
+  if(jwt){
+    const payload = jwtUtils.decodeJWT(jwt);
+    const permission = can.create(payload);
+    if (!permission.granted) {
+      cnx.status = 403;
+    } else {
+      const body = cnx.request.body;
+      body.agentID = payload.sub
+      let result = await model.add(body)
+      if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'property inserted into database'}
-    }
+      }
+    }  
+  } else {
+    cnx.status = 403;
   }
+  
 }
 
 async function updateProperty(cnx) {
@@ -55,6 +60,7 @@ async function updateProperty(cnx) {
   const payload = jwtUtils.decodeJWT(jwt);
   //first of all get the id of the article
   let id = cnx.params.id
+  id = parseInt(id)
   id = {ID: id};
   const permission = can.update(payload, id);
   if (!permission.granted) {
@@ -78,6 +84,7 @@ async function deleteProperty(cnx) {
   const payload = jwtUtils.decodeJWT(jwt);
   //first get the id of the article we want to delete
   let id = cnx.params.id
+  id = parseInt(id)
   id = {ID: id};
   const permission = can.delete(payload, id);
   if (!permission.granted) {

@@ -24,13 +24,13 @@ exports.add = async function createProperty (property) {
 exports.update = async function updateProperty (property, id) {
   let query = "UPDATE properties SET ? WHERE ID= ?;"
   let values = [property, id]
-  let data = await run_query(query, values);
+  let data = await db.run_query(query, values);
   return data;
 }
 
 exports.delete = async function deleteProperty(id) {
   let query = "DELETE FROM properties WHERE ID= ?;"
   let values = [id]
-  let data = await run_query(query, values);
+  let data = await db.run_query(query, values);
   return data;
 }

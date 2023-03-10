@@ -25,9 +25,9 @@ module.exports = {
             "description": "the URL for the agents avatar image",
             "type": "uri"
          },
-         "telephoneNumber": {
+         "telephone": {
             "description": "the contact number for the agent",
-            "type": "integer"
+            "type": "string"
          },
          "email": {
             "description": "the email for the agent",
@@ -35,5 +35,5 @@ module.exports = {
          },
          
       },
-      "required": ["name", "password", "location", "telephoneNumber", "email"]
+      "required": ["name", "password", "location", "telephone", "email"]
    }

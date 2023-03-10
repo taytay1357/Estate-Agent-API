@@ -14,7 +14,7 @@ ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).exec
 
 
 exports.create = (requester) =>
-   ac.can(requester.role).execute('create').sync().on('properties');
+   ac.can(requester.role).execute('create').sync().on('property');
 
 exports.update = (requester, data) => 
    ac.can(requester.role).context({requester:requester.sub, owner:data.ID}).execute('update').sync().on('property');

@@ -11,7 +11,7 @@ const passwordUtils = require('../helpers/passwordHelpers');
 
 router.get('/', getAll);
 router.post('/', bodyParser(), validateAgent ,createAgent);
-router.post('/login', bodyParser(), validateLogin, agentLogin)
+router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
 router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', bodyParser(), validateAgent, updateAgent);
 router.del('/:id([0-9]{1,})', deleteAgent);
@@ -88,7 +88,7 @@ async function createAgent(cnx) {
   if (result) {
     const jwt = jwtUtils.issueJWT(result);
     cnx.status = 201;
-    cnx.body = {success: true, agent: result, token: jwt.token, expiresIn: jwt.expires}
+    cnx.body = {success: true, agent: body, token: jwt.token, expiresIn: jwt.expires}
   } else {
     cnx.body = {success: false, msg: 'could not create an agent with these credentials'}
   }
