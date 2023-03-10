@@ -7,13 +7,14 @@ const {validateProperty} = require('../controllers/validation')
 const router = Router({prefix: '/api/v1/properties'});
 const can = require('../permissions/property');
 const jwtUtils = require('../helpers/jsonwebtoken');
+const auth = require('../controllers/auth');
 
 router.get('/', getAll);
-router.post('/', bodyParser(), validateProperty ,createProperty);
+router.post('/', bodyParser(), auth ,validateProperty , createProperty);
 
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), validateProperty , updateProperty);
-router.del('/:id([0-9]{1,})', deleteProperty);
+router.put('/:id([0-9]{1,})', bodyParser(), auth ,validateProperty , updateProperty);
+router.del('/:id([0-9]{1,})', auth ,deleteProperty);
 
 //Now we define handler functions used above.
 

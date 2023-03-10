@@ -8,13 +8,14 @@ const router = Router({prefix: '/api/v1/agents'});
 const jwtUtils = require('../helpers/jsonwebtoken');
 const can = require('../permissions/agents');
 const passwordUtils = require('../helpers/passwordHelpers');
+const auth = require('../controllers/auth');
 
-router.get('/', getAll);
+router.get('/', auth ,getAll);
 router.post('/', bodyParser(), validateAgent ,createAgent);
 router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
-router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), validateAgent, updateAgent);
-router.del('/:id([0-9]{1,})', deleteAgent);
+router.get('/:id([0-9]{1,})', auth ,getById);
+router.put('/:id([0-9]{1,})', auth ,bodyParser(), validateAgent, updateAgent);
+router.del('/:id([0-9]{1,})', auth ,deleteAgent);
 
 //Now we define handler functions used above.
 

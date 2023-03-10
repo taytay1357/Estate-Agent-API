@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+   version: 1.0.0
+   title: Estate Agent API
+   description: A simple estate agent API.
+   contact:
+      name: Josh Taylor
+      email: taylorj12@coventry.ac.uk
+   license:
+      name: Apache 2.0
+      url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+   - url: 'https://geminirainbow-sizeemail-3000.codio-box.uk/api/v1'
+     description: Development server
+tags:
+   - name: Users
+     description: API endpoints for user management.
+   - name: Agents
+     description: API endpoints for agent management.
+   - name: Properties
+     description: Access and perform CRUD operations on properties.
+paths:
+   /users:
+      get:
+         tags:
+            - Users
+         description:
+            Get all users in database.
+         responses: 
+            '201':
+               description: View of a users record, excluding password.
+            '404': 
+               description: User was not found in the db.
+            '403':
+               description: User not verified to look at resource.
+      post:
+         tags:
+            - Users
+         description:
+            Create a new user.
+         responses:
+            '201':
+               description: User record successfully created.
+   /users/{id}:
+      get:
+         tags:
+            - Users
+         description: 
+            Get user by id
+         responses:
+            '201':
+               description: View of a users record, excluding password.
+            '404': 
+               description: User was not found in the db.
+            '403':
+               description: User not verified to look at resource.
+      put:
+         tags:
+            - Users
+         description:
+            Update user by id
+      del:
+         tags:
+            - Users
+         description:
+            Delete user by id
+   /users/login:

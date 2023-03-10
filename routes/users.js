@@ -11,13 +11,12 @@ const can = require('../permissions/users');
 const router = Router({prefix: '/api/v1/users'});
 
 
-router.get('/', getAll);
+router.get('/', auth ,getAll);
 router.post('/', bodyParser(), validateUser, createUser);
 
 router.get('/:id([0-9]{1,})', auth ,getById);
 router.put('/:id([0-9]{1,})', bodyParser(), auth , validateUser, updateUser);
 router.del('/:id([0-9]{1,})', auth , deleteUser); 
-router.get('/protected', auth, protected)
 router.post('/login', bodyParser(), validateUserLogin, userLogin)
 
 
@@ -36,6 +35,9 @@ async function getAll(cnx) {
     let users = await model.getAll()
     if (users.length) {
       cnx.body = users;
+      cnx.status = 201;
+    } else { 
+      cnx.status = 404;
     }
   }
   } else {
@@ -58,6 +60,9 @@ async function getById(cnx) {
   } else {
     if (users.length) {
       cnx.body = users[0];
+      cnx.status = 201;
+    } else {
+      cnx.status = 404;
     }
   }
   } else {
@@ -66,12 +71,6 @@ async function getById(cnx) {
   
   
 }
-
-async function protected(cnx) {
-
-  cnx.body = { success: true, msg: "You are authorized!"}
-}
-
 async function createUser(cnx) {
   
   const body = cnx.request.body;
@@ -88,8 +87,10 @@ async function createUser(cnx) {
   if (result) {
     const jwt = jwtUtils.issueJWT(result)
     cnx.body = { success: true, user: result, token: jwt.token, expiresIn: jwt.expires}
+    cnx.status = 201;
   }  else {
     cnx.body = { success: false, msg: "could not create a user with these credentials" }
+    cnx.status = 404;
   }
 }
 
