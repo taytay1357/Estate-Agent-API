@@ -42,9 +42,20 @@ paths:
             - Users
          description:
             Create a new user.
+         requestBody:
+            description: All new user data.
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./users.json#/definitions/user
          responses:
             '201':
                description: User record successfully created.
+               content:
+                  application/json:
+                     schema:
+                        $ref: ./users.json#/definitions/userCreated
    /users/{id}:
       parameters:
          - in: path
