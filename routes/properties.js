@@ -57,7 +57,8 @@ async function createProperty(cnx) {
 
 async function updateProperty(cnx) {
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt);
+  if (jwt){
+    const payload = jwtUtils.decodeJWT(jwt);
   //first of all get the id of the article
   let id = cnx.params.id
   id = parseInt(id)
@@ -75,13 +76,18 @@ async function updateProperty(cnx) {
       cnx.body = {msg: 'record has been updated'}
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
 }
 
 
 
 async function deleteProperty(cnx) {
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt);
+  if (jwt){
+    const payload = jwtUtils.decodeJWT(jwt);
   //first get the id of the article we want to delete
   let id = cnx.params.id
   id = parseInt(id)
@@ -96,6 +102,10 @@ async function deleteProperty(cnx) {
       cnx.body = {msg: 'record has been deleted'}
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
 }
 
 //Finally, define the exported object when 'require'd from other scripts

@@ -27,7 +27,8 @@ async function getAll(cnx) {
   //because of using jwt we need to decrypt the payload and get the admin value
   //of the user to use for authorization
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt)
+  if (jwt){
+    const payload = jwtUtils.decodeJWT(jwt)
   const permission = can.readAll(payload);
   if (!permission.granted) {
     cnx.status = 403;
@@ -37,13 +38,18 @@ async function getAll(cnx) {
       cnx.body = users;
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
   
   
 }
 async function getById(cnx) {
   //Get the ID from the route parameters.
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt);
+  if (jwt){
+    const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   let users = await model.getById(id);
   const permission = can.read(payload, users[0]);
@@ -54,6 +60,10 @@ async function getById(cnx) {
       cnx.body = users[0];
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
   
 }
 
@@ -114,6 +124,7 @@ async function userLogin(cnx) {
 async function updateUser(cnx) {
   //first of all get the id of the article
   const jwt = cnx.request.header.authorization;
+  if (jwt) {
   const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   id = parseInt(id);
@@ -134,6 +145,10 @@ async function updateUser(cnx) {
       cnx.body = {msg: "record has been updated"}
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
 }
 
 
@@ -141,7 +156,8 @@ async function updateUser(cnx) {
 async function deleteUser(cnx) {
   //first get the id of the article we want to delete
   const jwt = cnx.request.header.authorization;
-  const payload = jwtUtils.decodeJWT(jwt);
+  if (jwt) {
+    const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   id = parseInt(id)
   const user = {ID: id};
@@ -155,6 +171,10 @@ async function deleteUser(cnx) {
       cnx.body = {msg: "record has been deleted"}
     }
   }
+  } else {
+    cnx.status = 403;
+  }
+  
 }
 
 //Finally, define the exported object when 'require'd from other scripts
