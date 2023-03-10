@@ -1,9 +1,9 @@
 const {Validator, ValidationError} = require('jsonschema');
-const propertySchema = require('../schemas/property.schema.js');
-const agentSchema = require('../schemas/agents.schema.js');
-const agentLoginSchema = require('../schemas/agent_login.schema.js')
-const userSchema = require('../schemas/users.schema.js');
-const loginSchema = require('../schemas/login.schema.js');
+const propertySchema = require('../schemas/property.json');
+const agentSchema = require('../schemas/agents.json');
+const agentLoginSchema = require('../schemas/agent_login.json')
+const userSchema = require('../schemas/users.json');
+const loginSchema = require('../schemas/login.json');
 const v = new Validator();
 
 exports.validateProperty = async (ctx, next) => {

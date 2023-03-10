@@ -1,15 +1,15 @@
-module.exports = {
+{
       "$schema": "http://json-schema.org/draft-04/schema#",
       "id": "/users",
       "title": "User",
-      "description": "Login route so only requires username and password",
+      "description": "A user in the API",
       "type": "object",
       "properties": {
-         "location": {
+         "firstName": {
             "description": "the first name of the user",
             "type": "string"
          },
-         "name": {
+         "username": {
             "description": "the username of the user",
             "type": "string"
          },
@@ -25,11 +25,15 @@ module.exports = {
             "description": "the URL for the users avatar image",
             "type": "uri"
          },
+         "lastName": {
+            "description": "the last name of the user",
+            "type": "string"
+         },
          "email": {
             "description": "the email for the agent",
             "type": "string"
-         },
+         }
          
       },
-      "required": ["name", "password"]
+      "required": ["firstName", "username", "password", "lastName", "email"]
    }

@@ -1,4 +1,4 @@
-   module.exports = {
+{
       "$schema": "http://json-schema.org/draft-04/schema#",
       "id": "/properties",
       "title": "Property",
@@ -33,7 +33,7 @@
          "description": {
             "description": "short description about the property",
             "type": "string"
-         },
+         }
       },
       "required": ["type", "price", "address", "bedrooms", "bathrooms"]
    }

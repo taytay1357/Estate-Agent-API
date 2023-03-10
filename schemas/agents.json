@@ -1,4 +1,4 @@
-module.exports = {
+{
       "$schema": "http://json-schema.org/draft-04/schema#",
       "id": "/agents",
       "title": "Agent",
@@ -32,8 +32,7 @@ module.exports = {
          "email": {
             "description": "the email for the agent",
             "type": "string"
-         },
-         
+         }
       },
       "required": ["name", "password", "location", "telephone", "email"]
    }
