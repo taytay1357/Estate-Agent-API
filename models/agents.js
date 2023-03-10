@@ -35,3 +35,10 @@ exports.delete = async function deleteAgent(id) {
   let data = await run_query(query, values);
   return data;
 }
+
+exports.findByName = async function getByUsername(name) {
+  const query = "SELECT * FROM agents WHERE name = ?;";
+  const agent = await db.run_query(query, name);
+  return agent;
+}
+
