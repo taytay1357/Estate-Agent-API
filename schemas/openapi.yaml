@@ -21,6 +21,10 @@ tags:
      description: Access and perform CRUD operations on properties.
 paths:
    /users:
+      summary: Represents an individual user
+      description: >
+            This resource represents an individual user in the system.
+            Each user is identified by a numeric `id`.
       get:
          tags:
             - Users
@@ -42,6 +46,13 @@ paths:
             '201':
                description: User record successfully created.
    /users/{id}:
+      parameters:
+         - in: path
+           name: id
+           schema:
+               type: integer
+           required: true
+           description: Numeric id of the user.
       get:
          tags:
             - Users
@@ -59,9 +70,35 @@ paths:
             - Users
          description:
             Update user by id
+         responses:
+            '403':
+               description: User not verified to use resource.
+            '201':
+               description: User record updated successfully.
+            '404': 
+               description: User was not found in the db.
       del:
          tags:
             - Users
          description:
             Delete user by id
+         responses:
+            '403':
+               description: User not verified to use resource.
+            '201':
+               description: User record deleted successfully.
+            '404': 
+               description: User was not found in the db.
    /users/login:
+      post:
+         tags:
+            - Users
+         description:
+            Login user by username and password.
+         responses:
+            '201':
+               description: User successfully logged in and jwt issued.
+            '404': 
+               description: User was not found in the db.
+            '401':
+               description: Wrong password entered.

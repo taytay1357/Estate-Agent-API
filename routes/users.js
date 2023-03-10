@@ -102,7 +102,7 @@ async function userLogin(cnx) {
   let user = await model.findByUsername(username)
 
   if (!user || user === undefined) {
-    cnx.status = 401;
+    cnx.status = 404;
     cnx.body = { success: false, msg: "could not find user"}
   }
 
@@ -144,6 +144,9 @@ async function updateUser(cnx) {
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: "record has been updated"}
+    } else {
+      cnx.status = 404;
+      cnx.body = {msg: "user not found"}
     }
   }
   } else {
@@ -170,6 +173,8 @@ async function deleteUser(cnx) {
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: "record has been deleted"}
+    } else {
+      cnx.status = 404;
     }
   }
   } else {
