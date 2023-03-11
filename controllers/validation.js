@@ -1,3 +1,10 @@
+/**
+ * A module to run JSON schema based validation on request/response data.
+ * @module controllers/validation
+ * @author Josh Taylor
+ * @see schemas/* for JSON Schema definition files
+ */
+
 const {Validator, ValidationError} = require('jsonschema');
 const propertySchema = require('../schemas/property.json');
 const agentSchema = require('../schemas/agents.json');
@@ -6,6 +13,12 @@ const userSchema = require('../schemas/users.json').definitions.user;
 const loginSchema = require('../schemas/login.json');
 const v = new Validator();
 
+
+/**
+ * Wrapper that returns a Koa middleware validator for the property schema
+ * @param {object} schema - The JSON schema definition for the property resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
 exports.validateProperty = async (ctx, next) => {
 
    const validationOptions = {
@@ -14,6 +27,12 @@ exports.validateProperty = async (ctx, next) => {
    };
 
    const body = ctx.request.body;
+   /**
+    * Koa middleware handler function to validateProperty
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
 
    try {
       v.validate(body, propertySchema, validationOptions);
@@ -27,7 +46,11 @@ exports.validateProperty = async (ctx, next) => {
       }
    }
 }
-
+/**
+ * Wrapper that returns a Koa middleware validator for the agent schema
+ * @param {object} schema - The JSON schema definition for the agent resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
 exports.validateAgent = async (ctx, next) => {
 
    const validationOptions = {
@@ -36,6 +59,12 @@ exports.validateAgent = async (ctx, next) => {
    };
 
    const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateAgent
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
 
    try {
       v.validate(body, agentSchema, validationOptions);
@@ -49,6 +78,11 @@ exports.validateAgent = async (ctx, next) => {
       }
    }
 }
+/**
+ * Wrapper that returns a Koa middleware validator for the user schema
+ * @param {object} schema - The JSON schema definition for the user resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
 
 exports.validateUser = async (ctx, next) => {
 
@@ -58,6 +92,12 @@ exports.validateUser = async (ctx, next) => {
    };
 
    const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateUser
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
 
    try {
       v.validate(body, userSchema, validationOptions);
@@ -71,7 +111,11 @@ exports.validateUser = async (ctx, next) => {
       }
    }
 }
-
+/**
+ * Wrapper that returns a Koa middleware validator for the user login schema
+ * @param {object} schema - The JSON schema definition for the user login resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
 exports.validateUserLogin = async (ctx, next) => {
 
    const validationOptions = {
@@ -80,6 +124,12 @@ exports.validateUserLogin = async (ctx, next) => {
    };
 
    const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateUserLogin
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
 
    try {
       v.validate(body, loginSchema, validationOptions);
@@ -93,6 +143,11 @@ exports.validateUserLogin = async (ctx, next) => {
       }
    }
 }
+/**
+ * Wrapper that returns a Koa middleware validator for the agent login schema
+ * @param {object} schema - The JSON schema definition for the agent login resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
 
 exports.validateAgentLogin = async (ctx, next) => {
 
@@ -102,6 +157,12 @@ exports.validateAgentLogin = async (ctx, next) => {
    };
 
    const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateAgentLogin
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
 
    try {
       v.validate(body, agentLoginSchema, validationOptions);

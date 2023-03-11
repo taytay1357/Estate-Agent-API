@@ -11,7 +11,7 @@
                "description": "ID of the new/updated user record",
                "type": "integer"
             },
-            "updated": {
+            "success": {
                "description": "Boolean indicator of success",
                "type": "boolean"
             },
@@ -46,7 +46,7 @@
             },
             "avatarURL": {
                "description": "the URL for the users avatar image",
-               "type": "uri"
+               "type": "string"
             },
             "lastName": {
                "description": "the last name of the user",
