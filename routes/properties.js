@@ -22,6 +22,9 @@ async function getAll(cnx) {
   let properties = await model.getAll()
   if (properties.length) {
     cnx.body = properties;
+    cnx.status = 201;
+  } else {
+    cnx.status = 404;
   }
   
 }
@@ -48,6 +51,8 @@ async function createProperty(cnx) {
       if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'property inserted into database'}
+      } else {
+        cnx.status = 404;
       }
     }  
   } else {

@@ -1,18 +1,41 @@
 {
       "$schema": "http://json-schema.org/draft-04/schema#",
-      "id": "/users",
-      "title": "User",
-      "description": "Login route so only requires username and password",
-      "type": "object",
-      "properties": {
-         "username": {
-            "description": "the username of the user",
-            "type": "string"
+      "definitions": {
+         "user": {
+            "id": "/users",
+            "title": "User",
+            "description": "Login route so only requires username and password",
+            "type": "object",
+            "properties": {
+               "username": {
+                  "description": "the username of the user",
+                  "type": "string"
+               },
+               "password": {
+                  "description": "the password of the user",
+                  "type": "string"
+               }
+            },
+            "required": ["username", "password"],
+            "additionalProperties": false
          },
-         "password": {
-            "description": "the password of the user",
-            "type": "string"
+         "agent": {
+            "id": "/agents",
+            "title": "Agents",
+            "description": "Login route so only requires name and password",
+            "type": "object",
+            "properties": {
+               "name": {
+                  "description": "the name of the agent",
+                  "type": "string"
+               },
+               "password": {
+                  "description": "the password of the agent",
+                  "type": "string"
+               }
+            },
+            "required": ["name", "password"],
+            "additionalProperties": false
          }
-      },
-      "required": ["username", "password"]
-   }
+      }
+}

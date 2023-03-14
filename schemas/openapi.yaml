@@ -21,8 +21,8 @@ tags:
      description: Access and perform CRUD operations on properties.
 paths:
    /users:
-      summary: Represents an individual user
-      description: >
+      summary: Represents all users
+      description: 
             This resource represents an individual user in the system.
             Each user is identified by a numeric `id`.
       get:
@@ -81,6 +81,13 @@ paths:
             - Users
          description:
             Update user by id
+         requestBody:
+            description: All new user data to be updated.
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./users.json#/definitions/user
          responses:
             '403':
                description: User not verified to use resource.
@@ -106,6 +113,13 @@ paths:
             - Users
          description:
             Login user by username and password.
+         requestBody:
+            description: Login credentials for the user
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./login.json#/definitions/user
          responses:
             '201':
                description: User successfully logged in and jwt issued.
@@ -113,3 +127,179 @@ paths:
                description: User was not found in the db.
             '401':
                description: Wrong password entered.
+   /agents:
+      get:
+         tags:
+            - Agents
+         description:
+            Represents all agents
+         responses:
+            '201':
+               description: Agent was found in the database
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Agent was not found in the database
+      post:
+         tags: 
+            - Agents
+         description:
+            Create a new agent
+         requestBody:
+            description: All new agent data.
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./agents.json#/definitions/agent
+         responses:
+            '201':
+               description: Agents record successfully created.
+               content:
+                  application/json:
+                     schema:
+                        $ref: ./agents.json#/definitions/agentCreated
+            '404': 
+               description: Could not create an agent with the provided information
+   /agents/{id}:
+      get:
+         tags:
+            - Agents
+         description: 
+            individual agent by numerical id
+         responses:
+            '201':
+               description: Agent was found in the database
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Agent was not found in the database
+      put:
+         tags:
+            - Agents
+         description:
+            update an existing agent record in the database
+         requestBody:
+            description: All new agent data to be updated
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./agents.json#/definitions/agent
+         responses:
+            '201':
+               description: Agent was updated successfully in the database
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Agent was not found in the database
+      del:
+         tags:
+            - Agents
+         description:
+            delete an existing agent record in the database
+         responses:
+            '201':
+               description: Agent was deleted from the database successfully
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Agent was not found in the database
+   /agents/login:
+       post:
+         tags:
+            - Agents
+         description:
+            Login agent by name and password.
+         requestBody:
+            description: Login credentials for the agent
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./login.json#/definitions/agent
+         responses:
+            '201':
+               description: Agent successfully logged in and jwt issued.
+            '404': 
+               description: Agent was not found in the db.
+            '401':
+               description: Wrong password entered.
+   /properties:
+      get:
+         tags:
+            - Properties
+         description:
+            Represents all properties
+         responses:
+            '201':
+               description: Property was found in the database
+            '404': 
+               description: No properties on record
+      post:
+         tags: 
+            - Properties
+         description:
+            Create a new property
+         requestBody:
+            description: All new property data.
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./property.json#/definitions/property
+         responses:
+            '201':
+               description: Properties record successfully created.
+               content:
+                  application/json:
+                     schema:
+                        $ref: ./property.json#/definitions/propertyCreated
+            '404': 
+               description: Could not create an property with the provided information
+            '403': 
+               description: User not authorized to use this resource
+   /properties/{id}:
+      get:
+         tags:
+            - Properties
+         description: 
+            individual property by numerical id
+         responses:
+            '201':
+               description: Property was found in the database
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Property was not found in the database
+      put:
+         tags:
+            - Properties
+         description:
+            update an existing property record in the database
+         requestBody:
+            description: All new property data to be updated
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: ./property.json#/definitions/property
+         responses:
+            '201':
+               description: Property was updated successfully in the database
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Property was not found in the database
+      del:
+         tags:
+            - Properties
+         description:
+            delete an existing property record in the database
+         responses:
+            '201':
+               description: Property was deleted from the database successfully
+            '403': 
+               description: User not authorized to look at this resource
+            '404': 
+               description: Property was not found in the database

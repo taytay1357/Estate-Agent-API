@@ -22,17 +22,19 @@ router.del('/:id([0-9]{1,})', auth ,deleteAgent);
 async function getAll(cnx) {
   const jwt = cnx.request.header.authorization;
   if (jwt) {
-    
-  const payload = jwtUtils.decodeJWT(jwt);
-  const permission = can.readAll(payload);
-  if (!permission.granted) {
-    cnx.status = 403;
-  } else {
-    let agents = await model.getAll()
-    if (agents.length) {
-      cnx.body = agents;
+    const payload = jwtUtils.decodeJWT(jwt);
+    const permission = can.readAll(payload);
+    if (!permission.granted) {
+      cnx.status = 403;
+    } else {
+      let agents = await model.getAll()
+      if (agents.length) {
+        cnx.body = agents;
+        cnx.status = 201;
+      } else {
+        cnx.status = 404;
+      }
     }
-  }
   } else {
     cnx.status = 403;
   }
@@ -52,7 +54,10 @@ async function getById(cnx) {
   } else {
     let agents = await model.getById(id);
     if (agents.length) {
-      ctx.body = agents[0];
+      cnx.body = agents[0];
+      cnx.status = 201;
+    } else {
+      cnx.status = 404;
     }
   }
   } else {
@@ -104,6 +109,7 @@ async function createAgent(cnx) {
     cnx.body = {success: true, agent: body, token: jwt.token, expiresIn: jwt.expires}
   } else {
     cnx.body = {success: false, msg: 'could not create an agent with these credentials'}
+    cnx.status = 404;
   }
 }
 
@@ -128,6 +134,8 @@ async function updateAgent(cnx) {
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been updated'}
+    } else {
+      cnx.status = 404;
     }
   }
   } else {
@@ -154,6 +162,8 @@ async function deleteAgent(cnx) {
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been deleted'}
+    } else {
+      cnx.status = 404;
     }
   }
   } else {

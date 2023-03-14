@@ -1,38 +1,65 @@
 {
       "$schema": "http://json-schema.org/draft-04/schema#",
-      "id": "/agents",
-      "title": "Agent",
-      "description": "An estate agent in the API",
-      "type": "object",
-      "properties": {
-         "name": {
-            "description": "the name of the agent",
-            "type": "string"
+      "definitions": {
+         "agentCreated": {
+            "$id": "#agentCreated",
+            "title": "Agent Created",
+            "description": "Confirmation of a successful agent update/creation",
+            "type": "object",
+            "properties": {
+               "ID": {
+                  "description": "ID of the new/updated agent record",
+                  "type": "integer"
+               },
+               "success": {
+                  "description": "Boolean indicator of success",
+                  "type": "boolean"
+               },
+               "link": {
+                  "description": "Path to retrieve agent record",
+                  "type": "string",
+                  "format": "uri"
+               }
+            }  
          },
-         "password": {
-            "description": "the password of the agent",
-            "type": "string"
-         },
-         "passwordSalt": {
-            "description": "the salt used to hash the password",
-            "type": "string"
-         },
-         "location": {
-            "description": "the location of the agent",
-            "type": "string"
-         },
-         "avatarURL": {
-            "description": "the URL for the agents avatar image",
-            "type": "uri"
-         },
-         "telephone": {
-            "description": "the contact number for the agent",
-            "type": "string"
-         },
-         "email": {
-            "description": "the email for the agent",
-            "type": "string"
+         "agent": {
+            "id": "/agents",
+            "title": "Agent",
+            "description": "An estate agent in the API",
+            "type": "object",
+            "properties": {
+               "name": {
+                  "description": "the name of the agent",
+                  "type": "string"
+               },
+               "password": {
+                  "description": "the password of the agent",
+                  "type": "string"
+               },
+               "passwordSalt": {
+                  "description": "the salt used to hash the password",
+                  "type": "string"
+               },
+               "location": {
+                  "description": "the location of the agent",
+                  "type": "string"
+               },
+               "avatarURL": {
+                  "description": "the URL for the agents avatar image",
+                  "type": "uri"
+               },
+               "telephone": {
+                  "description": "the contact number for the agent",
+                  "type": "string"
+               },
+               "email": {
+                  "description": "the email for the agent",
+                  "type": "string"
+               }
+            },
+            "required": ["name", "password", "location", "telephone", "email"],
+            "additionalProperties": false
          }
-      },
-      "required": ["name", "password", "location", "telephone", "email"]
-   }
+         }
+      }
+      
