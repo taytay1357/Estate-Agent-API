@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: helpers/database.js</title>
+    <title>JSDoc: Source: controllers/auth.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: helpers/database.js</h1>
+    <h1 class="page-title">Source: controllers/auth.js</h1>
 
     
 
@@ -27,50 +27,29 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * A module to run SQL queries on MYSQL on behalf of the API models.
- * @module helpers/database
+ * A module to run authentication on users trying to use the API
+ * @module controllers/auth
  * @author Josh Taylor
- * @see models/* for the models that require this module
+ * @see strategies/* for different ways of authenticating users
  */
 
-const mysql = require('promise-mysql');
-const info = require('../config');
-const { v4: uuidv4 } = require('uuid');
+const passport = require('koa-passport');
+const basicAuth = require('../strategies/basic');
+const jwtAuth = require('../strategies/jwt')
 
 
+
+
+passport.use(jwtAuth);
 /**
- * Run an SQL query against the DB, end the connection and return the result.
- * @param {string} Query SQL query string in sqljs format
- * @param {array|number|string} values The values to inject into the query string.
- * @returns {object} mysqljs results object containing indexable rows
- * @throws {DatabaseException} Custom exception for DB query failures
+ * A wrapper that returns a response body to indicate whether the user is or is not authorized
+ * @param {string} jwt - A user jwt string
+ * @returns {object} - A response body indicating to the user if they are authorized
  */
-exports.run_query = async function run_query(query, values) {
-  try {
-    const connection = await mysql.createConnection(info.config);
-    let data = await connection.query(query, values);
-    await connection.end();
-    return data;
-  } catch(err) {
-    const errorId = uuidv4();
-    console.error(Date.now(), errorId, values, error.message);
-    throw new DatabaseException("Database error", error.code, errorId);
-  }
-}
-
-/**
- * A custom error constructor to raise DB errors in a sanitised way.
- * @class
- * @param {string} message -  the error message
- * @param {number|string} code - the original error's error code
- * @param {string} id - a UUID identifier for the error instanced
- */
-function DatabaseException(message, code, id) {
-  this.message = message;
-  this.code = code;
-  this.id = id;
-  this.name = 'DatabaseException';
-}</code></pre>
+module.exports = passport.authenticate('jwt', { session:false }), (req, res) => {
+  res.status = 201;
+  res.body = { success: true, msg: "You are authorized!"};
+};</code></pre>
         </article>
     </section>
 

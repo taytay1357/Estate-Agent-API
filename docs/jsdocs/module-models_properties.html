@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: controllers/validation</title>
+    <title>JSDoc: Module: models/properties</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: controllers/validation</h1>
+    <h1 class="page-title">Module: models/properties</h1>
 
     
 
@@ -34,7 +34,7 @@
     <div class="container-overview">
     
         
-            <div class="description">A module to run JSON schema based validation on request/response data.</div>
+            <div class="description">A module of helpers that is used in the properties route to get, create, update and delete things from persistent storage</div>
         
 
         
@@ -76,7 +76,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line1">line 1</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -86,7 +86,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>schemas/* for JSON Schema definition files</li>
+            <li>routes/ where the models are used</li>
         </ul>
     </dd>
     
@@ -122,7 +122,7 @@
     
 
     
-    <h4 class="name" id=".validateAgent"><span class="type-signature">(static) </span>validateAgent<span class="signature">(schema)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".add"><span class="type-signature">(static) </span>add<span class="signature">(agent)</span><span class="type-signature"> &rarr; {object|array}</span></h4>
     
 
     
@@ -130,7 +130,7 @@
 
 
 <div class="description">
-    Wrapper that returns a Koa middleware validator for the agent schema
+    A function which adds new property data to storage
 </div>
 
 
@@ -166,7 +166,7 @@
 
         <tr>
             
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>agent</code></td>
             
 
             <td class="type">
@@ -182,7 +182,7 @@
 
             
 
-            <td class="description last">The JSON schema definition for the agent resource</td>
+            <td class="description last">all the relevant property information to be inserted</td>
         </tr>
 
     
@@ -223,7 +223,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line54">line 54</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -252,7 +252,7 @@
 
         
 <div class="param-desc">
-    - A Koa middleware handler taking (ctx, next) params
+    usually an array containing insert id etc of the record inserted
 </div>
 
 
@@ -263,7 +263,10 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">object</span>
+|
+
+<span class="param-type">array</span>
 
 
     </dd>
@@ -281,7 +284,7 @@
     
 
     
-    <h4 class="name" id=".validateAgentLogin"><span class="type-signature">(static) </span>validateAgentLogin<span class="signature">(schema)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".delete"><span class="type-signature">(static) </span>delete<span class="signature">(id)</span><span class="type-signature"> &rarr; {array|object}</span></h4>
     
 
     
@@ -289,7 +292,7 @@
 
 
 <div class="description">
-    Wrapper that returns a Koa middleware validator for the agent login schema
+    A function that handles deleting property records from the database
 </div>
 
 
@@ -325,13 +328,13 @@
 
         <tr>
             
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">number</span>
 
 
             
@@ -341,7 +344,7 @@
 
             
 
-            <td class="description last">The JSON schema definition for the agent login resource</td>
+            <td class="description last">the property id that needs to be deleted</td>
         </tr>
 
     
@@ -382,7 +385,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line152">line 152</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -411,7 +414,7 @@
 
         
 <div class="param-desc">
-    - A Koa middleware handler taking (ctx, next) params
+    the object returned confirming deletion of the record
 </div>
 
 
@@ -422,7 +425,10 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">array</span>
+|
+
+<span class="param-type">object</span>
 
 
     </dd>
@@ -440,7 +446,7 @@
     
 
     
-    <h4 class="name" id=".validateProperty"><span class="type-signature">(static) </span>validateProperty<span class="signature">(schema)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".getAll"><span class="type-signature">(static) </span>getAll<span class="signature">(page, limit, order)</span><span class="type-signature"> &rarr; {array|object}</span></h4>
     
 
     
@@ -448,7 +454,7 @@
 
 
 <div class="description">
-    Wrapper that returns a Koa middleware validator for the property schema
+    A function which gets all property records from storage
 </div>
 
 
@@ -484,13 +490,13 @@
 
         <tr>
             
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>page</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">number</span>
 
 
             
@@ -500,7 +506,53 @@
 
             
 
-            <td class="description last">The JSON schema definition for the property resource</td>
+            <td class="description last">the page number</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the limit for the number of records</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the order in which you want the data returned</td>
         </tr>
 
     
@@ -541,7 +593,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line22">line 22</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -570,7 +622,7 @@
 
         
 <div class="param-desc">
-    - A Koa middleware handler taking (ctx, next) params
+    the data returned from storage
 </div>
 
 
@@ -581,7 +633,10 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">array</span>
+|
+
+<span class="param-type">object</span>
 
 
     </dd>
@@ -599,7 +654,7 @@
     
 
     
-    <h4 class="name" id=".validateUser"><span class="type-signature">(static) </span>validateUser<span class="signature">(schema)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".getById"><span class="type-signature">(static) </span>getById<span class="signature">(id)</span><span class="type-signature"> &rarr; {array|object}</span></h4>
     
 
     
@@ -607,7 +662,7 @@
 
 
 <div class="description">
-    Wrapper that returns a Koa middleware validator for the user schema
+    A function which takes an id and based off that id gets all data about that property from storage
 </div>
 
 
@@ -643,13 +698,13 @@
 
         <tr>
             
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">number</span>
 
 
             
@@ -659,7 +714,7 @@
 
             
 
-            <td class="description last">The JSON schema definition for the user resource</td>
+            <td class="description last">the id of the property</td>
         </tr>
 
     
@@ -700,7 +755,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line87">line 87</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -729,7 +784,7 @@
 
         
 <div class="param-desc">
-    - A Koa middleware handler taking (ctx, next) params
+    the data returned from persistent storage
 </div>
 
 
@@ -740,7 +795,10 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">array</span>
+|
+
+<span class="param-type">object</span>
 
 
     </dd>
@@ -758,7 +816,7 @@
     
 
     
-    <h4 class="name" id=".validateUserLogin"><span class="type-signature">(static) </span>validateUserLogin<span class="signature">(schema)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".update"><span class="type-signature">(static) </span>update<span class="signature">(agent, id)</span><span class="type-signature"> &rarr; {object|array}</span></h4>
     
 
     
@@ -766,7 +824,7 @@
 
 
 <div class="description">
-    Wrapper that returns a Koa middleware validator for the user login schema
+    A function which updates existing property records in the database
 </div>
 
 
@@ -802,7 +860,7 @@
 
         <tr>
             
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>agent</code></td>
             
 
             <td class="type">
@@ -818,7 +876,30 @@
 
             
 
-            <td class="description last">The JSON schema definition for the user login resource</td>
+            <td class="description last">the new property object containing all updated data</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the property that wants to be updated</td>
         </tr>
 
     
@@ -859,7 +940,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_validation.js.html">controllers/validation.js</a>, <a href="controllers_validation.js.html#line119">line 119</a>
+        <a href="models_properties.js.html">models/properties.js</a>, <a href="models_properties.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -888,7 +969,7 @@
 
         
 <div class="param-desc">
-    - A Koa middleware handler taking (ctx, next) params
+    the insert id of the property that has been updated
 </div>
 
 
@@ -899,7 +980,10 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">object</span>
+|
+
+<span class="param-type">array</span>
 
 
     </dd>

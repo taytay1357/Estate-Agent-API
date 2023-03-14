@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: helpers/database</title>
+    <title>JSDoc: Module: helpers/genKeyPair</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: helpers/database</h1>
+    <h1 class="page-title">Module: helpers/genKeyPair</h1>
 
     
 
@@ -34,7 +34,7 @@
     <div class="container-overview">
     
         
-            <div class="description">A module to run SQL queries on MYSQL on behalf of the API models.</div>
+            <div class="description">A module to generate public and private key pairs that are used in jwt authentication</div>
         
 
         
@@ -76,7 +76,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_database.js.html">helpers/database.js</a>, <a href="helpers_database.js.html#line1">line 1</a>
+        <a href="helpers_genKeyPair.js.html">helpers/genKeyPair.js</a>, <a href="helpers_genKeyPair.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -86,7 +86,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>models/* for the models that require this module</li>
+            <li>jsonwebtoken.js/* for the use of these keys</li>
         </ul>
     </dd>
     
@@ -103,13 +103,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
@@ -129,7 +122,7 @@
     
 
     
-    <h4 class="name" id=".run_query"><span class="type-signature">(static) </span>run_query<span class="signature">(Query, values)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~genKeyPair"><span class="type-signature">(inner) </span>genKeyPair<span class="signature">()</span><span class="type-signature"> &rarr; {File}</span></h4>
     
 
     
@@ -137,7 +130,7 @@
 
 
 <div class="description">
-    Run an SQL query against the DB, end the connection and return the result.
+    Function that returns a private and public key of file format .pem
 </div>
 
 
@@ -146,84 +139,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>Query</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">SQL query string in sqljs format</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>values</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-|
-
-<span class="param-type">number</span>
-|
-
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The values to inject into the query string.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -259,7 +174,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_database.js.html">helpers/database.js</a>, <a href="helpers_database.js.html#line20">line 20</a>
+        <a href="helpers_genKeyPair.js.html">helpers/genKeyPair.js</a>, <a href="helpers_genKeyPair.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -282,42 +197,13 @@
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Custom exception for DB query failures
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">DatabaseException</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    mysqljs results object containing indexable rows
+    the private and public .pem files
 </div>
 
 
@@ -328,7 +214,7 @@
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">File</span>
 
 
     </dd>
