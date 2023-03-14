@@ -2,3 +2,4 @@
 /config.js
 /helpers/priv_key.pem
 /helpers/pub_key.pem
+/jsdoc.conf.json
