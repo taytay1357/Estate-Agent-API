@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Home from './components/Home'
+import Nav from './components/Nav'
+import { Layout } from 'antd';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+const { Header, Content, Footer } = Layout;
 
 function App() {
+  const [current, setCurrent] = useState('home');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout className="App">
+        <Header style={{ backgroundColor: 'white', width: '70%'}}>
+          <Nav current={current} setCurrent={setCurrent} />
+        </Header>
+        <Content style={{ backgroundColor: 'white', width: '70%'}}>
+          <Routes>
+            <Route path="/" component={<Home />} />
+          </Routes>
+        </Content >
+        <Footer style={{ textAlign: 'center', backgroundColor: 'white', width: '70%'}}>Created for 6003CEM</Footer>
+      </Layout>
+    </Router>
   );
 }
 
