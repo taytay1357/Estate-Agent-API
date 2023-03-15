@@ -14,12 +14,12 @@ function App() {
         <Header style={{ backgroundColor: 'white', width: '70%'}}>
           <Nav current={current} setCurrent={setCurrent} />
         </Header>
-        <Content style={{ backgroundColor: 'white', width: '70%'}}>
+        <Content style={{ backgroundColor: 'white' }}>
           <Routes>
-            <Route path="/" component={<Home />} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </Content >
-        <Footer style={{ textAlign: 'center', backgroundColor: 'white', width: '70%'}}>Created for 6003CEM</Footer>
+        <Footer style={{ textAlign: 'center', backgroundColor: 'white', width: '70%', fontWeight: 'bold'}}>If you are one of our agents and need to access the agent login portal click <a>here.</a></Footer>
       </Layout>
     </Router>
   );
