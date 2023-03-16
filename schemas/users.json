@@ -60,5 +60,5 @@
          "required": ["firstName", "username", "password", "lastName", "email"],
          "additionalProperties": false
       }
-   },
+   }
 }

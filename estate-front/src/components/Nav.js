@@ -21,7 +21,7 @@ function Nav(props) {
   },
   {
     label: (
-       <a href="/users">Profile</a>
+       <a href="/register">Profile</a>
     ),
     key: 'user',
     icon: <UserOutlined />,

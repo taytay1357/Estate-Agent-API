@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^4.0.0",
     "base64url": "^3.0.1",
     "fs": "^0.0.1-security",
     "jsonschema": "^1.4.1",

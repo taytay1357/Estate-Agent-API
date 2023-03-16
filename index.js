@@ -1,11 +1,11 @@
 const Koa = require('koa');
 const Router = require('koa-router');
-
+const cors = require('@koa/cors')
 //Blog API
 //Setting up application and its router
 
 const app = new Koa();
-
+app.use(cors());
 /*
   Define route handlers
 
@@ -26,8 +26,9 @@ app.use(agents.routes());
 app.use(properties.routes());
 app.use(special.routes());
 
+
 //Finally, run the app as a process on a given port
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 5000;
 
 app.listen(port);

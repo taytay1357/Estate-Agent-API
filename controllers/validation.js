@@ -10,7 +10,7 @@ const propertySchema = require('../schemas/property.json');
 const agentSchema = require('../schemas/agents.json').definitions.agent;
 const agentLoginSchema = require('../schemas/login.json').definitions.agent;
 const userSchema = require('../schemas/users.json').definitions.user;
-const loginSchema = require('../schemas/login.json')definitions.user;
+const loginSchema = require('../schemas/login.json').definitions.user;
 const v = new Validator();
 
 
@@ -39,6 +39,7 @@ exports.validateProperty = async (ctx, next) => {
       await next();
    } catch(error) {
       if (error instanceof ValidationError) {
+         console.error(error)
          ctx.body = error;
          ctx.status = 400;
       } else {
