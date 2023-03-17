@@ -27,9 +27,10 @@ async function getAll(cnx) {
   //of the user to use for authorization
   const jwt = cnx.request.header.authorization;
   if (jwt){
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt)
   const permission = can.readAll(payload);
-  if (!permission.granted) {
+  if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     let users = await model.getAll()
@@ -51,11 +52,12 @@ async function getById(cnx) {
   //Get the ID from the route parameters.
   const jwt = cnx.request.header.authorization;
   if (jwt){
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   let users = await model.getById(id);
   const permission = can.read(payload, users[0]);
-  if (!permission.granted) {
+  if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     if (users.length) {
@@ -126,12 +128,13 @@ async function updateUser(cnx) {
   //first of all get the id of the article
   const jwt = cnx.request.header.authorization;
   if (jwt) {
+    const verify = jwtUtils.verifyJWT(jwt)
   const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   id = parseInt(id);
   const user = {ID: id};
   const permission = can.update(payload, user);
-  if (!permission.granted){
+  if (!permission.granted || verify != true){
     cnx.status = 403;
   } else {
     //receive request body and assign it to a new article variable
@@ -161,12 +164,13 @@ async function deleteUser(cnx) {
   //first get the id of the article we want to delete
   const jwt = cnx.request.header.authorization;
   if (jwt) {
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
   id = parseInt(id)
   const user = {ID: id};
   const permission = can.delete(payload, user);
-  if (!permission.granted){
+  if (!permission.granted || verify != true){
     cnx.status = 403;
   } else {
     let result = await model.delete(id)

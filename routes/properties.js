@@ -40,9 +40,10 @@ async function getById(cnx) {
 async function createProperty(cnx) {
   const jwt = cnx.request.header.authorization;
   if(jwt){
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
     const permission = can.create(payload);
-    if (!permission.granted) {
+    if (!permission.granted || verify != true) {
       cnx.status = 403;
     } else {
       const body = cnx.request.body;
@@ -64,13 +65,14 @@ async function createProperty(cnx) {
 async function updateProperty(cnx) {
   const jwt = cnx.request.header.authorization;
   if (jwt){
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   //first of all get the id of the article
   let id = cnx.params.id
   id = parseInt(id)
   id = {ID: id};
   const permission = can.update(payload, id);
-  if (!permission.granted) {
+  if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     //receive request body and assign it to a new article variable
@@ -93,13 +95,14 @@ async function updateProperty(cnx) {
 async function deleteProperty(cnx) {
   const jwt = cnx.request.header.authorization;
   if (jwt){
+    const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   //first get the id of the article we want to delete
   let id = cnx.params.id
   id = parseInt(id)
   id = {ID: id};
   const permission = can.delete(payload, id);
-  if (!permission.granted) {
+  if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     let result = await model.delete(id.ID)
