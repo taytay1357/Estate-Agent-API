@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Form, Input, Button } from 'antd';
+const {getFromLocal} = require('../front_helper/helper')
 
 const formItemLayout = {
 
@@ -28,7 +29,8 @@ const passwordRules = [
 
 ];
 
-function onTrigger(values, setLoggedIn) {
+
+function onTrigger(values) {
    
    const {confirm, ...data} = values;
    console.log('Received values from form: ', data);
@@ -43,8 +45,7 @@ function onTrigger(values, setLoggedIn) {
    .then(json)
    .then(data => {
       console.log(data)
-      localStorage.setItem('jwt', {jwt: data.token, expiresIn: data.expiresIn, admin: data.admin})
-      setLoggedIn(true)  
+      localStorage.setItem('jwt', {jwt: data.token, expiresIn: data.expiresIn, admin: data.admin}) 
       alert("User logged in")
    })
    .catch(errorResponse => {
@@ -55,7 +56,7 @@ function onTrigger(values, setLoggedIn) {
 
 function Login(props) {
    return (
-      <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger(props.setLoggedIn)}>
+      <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
          <Form.Item hasFeedback {...tailFormItemLayout} name="username" rules={usernameRules} label="Username">
             <Input/>
          </Form.Item>
@@ -68,7 +69,12 @@ function Login(props) {
             </Button>
          </Form.Item>
       </Form>
+      
    )
+   const jwt = getFromLocal(props.setLoggedIn);
+   if (jwt) {
+      props.setLoggedIn(true)
+   }
 }
 
 function status(response) {

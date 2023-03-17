@@ -2,14 +2,17 @@ import React from 'react';
 import { HomeOutlined, BankOutlined, UserOutlined} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
-const jwtUtils = require('../front_helper/jwt_helpers');
+const exports = require('../front_helper/helper')
+
 
 function Nav(props) {
-   let items;
-            const jwt = localStorage.getItem('jwt')
-         const decoded = jwtUtils.decodeJWT(jwt);
-         const url = `/users/${decoded.sub}`
-         items: MenuProps['items'] = [
+       const jwt = exports.getFromLocal(props.setLoggedIn)
+         if (jwt !== undefined) {
+            const decoded = exports.decodeJWT(jwt);
+            const url = `/users/${decoded.sub}`
+         }
+         const url = '/login'
+         let items: MenuProps['items'] = [
       {
          label: (
             <a href="/">Home</a>
@@ -37,7 +40,7 @@ function Nav(props) {
          props.setCurrent(e.key);
       }
    if (props.loggedIn == false) {
-      items: MenuProps['items'] = [
+      let items: MenuProps['items'] = [
       {
          label: (
             <a href="/">Home</a>

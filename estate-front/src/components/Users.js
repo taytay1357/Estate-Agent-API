@@ -1,18 +1,17 @@
 import React, {useState} from 'react';
-const jwtUtils = require('../front_helper/jwt_helpers')
-const {getFromLocal} = require('../front_helper/helper')
 import { Typography } from 'antd';
+const exports = require('../front_helper/helper')
+
+
 
 function Users(props) {
-   if (loggedIn) {
-      const jwt = getFromLocal();
-   const [userData, setUserData] = useState({});
+   const [userData, setUserData] = useState({})
+   if (props.loggedIn == true) {
+      const jwt = exports.getFromLocal(props.setLoggedIn);
    if (jwt) {
-      const decoded = jwtUtils.decodeJWT(jwt);
-      if (decoded.admin == true) {
+      if (jwt.admin == true) {
          fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users', {
          method: "GET",
-         body: JSON.stringify(data),
          headers: {
             "Content-Type": "application/json",
             "Authorization": jwt.token
@@ -29,9 +28,9 @@ function Users(props) {
             alert(`Error: ${errorResponse}`);
          })
       } else {
-         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${decoded.sub}`, {
+         const payload = exports.decodeJWT(jwt)
+         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${payload.sub}`, {
          method: "GET",
-         body: JSON.stringify(data),
          headers: {
             "Content-Type": "application/json",
             "Authorization": jwt.token
