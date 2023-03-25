@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
 const {getFromLocal} = require('../front_helper/helper')
 
 const formItemLayout = {
@@ -30,7 +30,7 @@ const passwordRules = [
 ];
 
 
-function onTrigger(values) {
+function onTrigger(values, setLoggedIn) {
    
    const {confirm, ...data} = values;
    console.log('Received values from form: ', data);
@@ -45,7 +45,8 @@ function onTrigger(values) {
    .then(json)
    .then(data => {
       console.log(data)
-      localStorage.setItem('jwt', {jwt: data.token, expiresIn: data.expiresIn, admin: data.admin}) 
+      const jwtObject = {jwt: data.token, expiresIn: data.expiresIn, admin: data.admin};
+      localStorage.setItem('jwt', JSON.stringify(jwtObject)) 
       alert("User logged in")
    })
    .catch(errorResponse => {
@@ -56,25 +57,24 @@ function onTrigger(values) {
 
 function Login(props) {
    return (
-      <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
-         <Form.Item hasFeedback {...tailFormItemLayout} name="username" rules={usernameRules} label="Username">
-            <Input/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="password" rules={passwordRules} label="Password">
-            <Input.Password/>
-         </Form.Item>
-         <Form.Item hasFeedback {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-               Login
-            </Button>
-         </Form.Item>
-      </Form>
+      <div>
+         <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
+            <Form.Item hasFeedback {...tailFormItemLayout} name="username" rules={usernameRules} label="Username">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="password" rules={passwordRules} label="Password">
+               <Input.Password/>
+            </Form.Item>
+            <Form.Item hasFeedback {...tailFormItemLayout}>
+               <Button type="primary" htmlType="submit">
+                  Login
+               </Button>
+            </Form.Item>
+         </Form>
+         <Typography>Don't have an account?<a href="/register"> Sign Up</a></Typography>
+      </div>
       
    )
-   const jwt = getFromLocal(props.setLoggedIn);
-   if (jwt) {
-      props.setLoggedIn(true)
-   }
 }
 
 function status(response) {

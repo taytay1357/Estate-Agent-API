@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
 
 const formItemLayout = {
 
@@ -92,31 +92,34 @@ function onTrigger(values) {
 
 function Register(props) {
    return (
-      <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
-         <Form.Item hasFeedback {...tailFormItemLayout} name="email" rules={emailRules} label="E-mail">
-            <Input/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="password" rules={passwordRules} label="Password">
-            <Input.Password/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="confirm" rules={confirmRules} label="Confirm Password">
-            <Input.Password/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="username" rules={usernameRules} label="Username">
-            <Input/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="firstName" rules={firstnameRules} label="First Name">
-            <Input/>
-         </Form.Item>
-         <Form.Item {...tailFormItemLayout} hasFeedback name="lastName" rules={lastnameRules} label="Last Name">
-            <Input/>
-         </Form.Item>
-         <Form.Item hasFeedback {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-               Register
-            </Button>
-         </Form.Item>
-      </Form>
+      <div>
+         <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
+            <Form.Item hasFeedback {...tailFormItemLayout} name="email" rules={emailRules} label="E-mail">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="password" rules={passwordRules} label="Password">
+               <Input.Password/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="confirm" rules={confirmRules} label="Confirm Password">
+               <Input.Password/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="username" rules={usernameRules} label="Username">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="firstName" rules={firstnameRules} label="First Name">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="lastName" rules={lastnameRules} label="Last Name">
+               <Input/>
+            </Form.Item>
+            <Form.Item hasFeedback {...tailFormItemLayout}>
+               <Button type="primary" htmlType="submit">
+                  Register
+               </Button>
+            </Form.Item>
+         </Form>
+         <Typography>Already have an account?<a href="/login"> Login</a></Typography>
+      </div>
    )
 }
 

@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
 import { Typography } from 'antd';
-const exports = require('../front_helper/helper')
+import getFromLocal from '../front_helper/helper';
+import decodeJWT from '../front_helper/jwt_helper';
 
 
 
 function Users(props) {
    const [userData, setUserData] = useState({})
    if (props.loggedIn == true) {
-      const jwt = exports.getFromLocal(props.setLoggedIn);
-   if (jwt) {
-      if (jwt.admin == true) {
+      const jwt = getFromLocal(props.setLoggedIn);
+   if (jwt !== undefined && jwt) {
+      const payload = decodeJWT(jwt)
+      if (payload.admin == true) {
          fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users', {
          method: "GET",
          headers: {
@@ -24,11 +26,12 @@ function Users(props) {
             setUserData(data)
          })
          .catch(errorResponse => {
+            
             console.error(errorResponse);
             alert(`Error: ${errorResponse}`);
          })
       } else {
-         const payload = exports.decodeJWT(jwt)
+         
          fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${payload.sub}`, {
          method: "GET",
          headers: {

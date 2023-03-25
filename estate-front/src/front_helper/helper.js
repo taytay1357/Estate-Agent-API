@@ -1,26 +1,18 @@
-import { Buffer } from 'buffer';
-const base64 = require('base64url');
-
-
-function getFromLocal(setLoggedIn) {
+export default function getFromLocal(setLoggedIn) {
    const jwt = localStorage.getItem('jwt');
-   if (jwt) {
+   JSON.parse(jwt);
+   if (jwt !== undefined && jwt) {
       const now = Date.now()
+      setLoggedIn(true)
       if (jwt.expiresIn >= now) {
          setLoggedIn(false)
+         localStorage.removeItem('jwt');
       } else {
          return jwt;
       }
+   } else {
+      setLoggedIn(false)
    }
 }
 
-function decodeJWT(signedJWT) {
-   const payload = signedJWT.split('.')[1];
-   //now decode it
-   const parseJWT = JSON.parse(Buffer.from(payload, 'base64').toString());
-   return parseJWT
-}
 
-const exports = {decodeJWT, getFromLocal}
-
-export default exports;
