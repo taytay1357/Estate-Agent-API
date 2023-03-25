@@ -8,3 +8,28 @@
    align-items: center;
    background-color: white;
 }
+
+.user_elements {
+   font-size: 1vw;
+   font-weight: bold;
+   display: flex;
+   flex-wrap: nowrap;
+   width: 100%;
+   justify-content: flex-start;
+   flex-direction: row;
+   margin: 0.5vw;
+   border-bottom: 1px solid black;
+}
+
+.class_fields {
+   font-weight: normal;
+   text-align: center;
+   padding: 0 0.5vw;
+}
+
+.user_heading {
+   font-size: 2vw;
+   font-weight: bold;
+   padding: 1vw;
+   
+}

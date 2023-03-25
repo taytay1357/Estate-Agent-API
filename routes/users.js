@@ -54,19 +54,19 @@ async function getById(cnx) {
   if (jwt){
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
-  let id = cnx.params.id
-  let users = await model.getById(id);
-  const permission = can.read(payload, users[0]);
-  if (!permission.granted || verify != true) {
-    cnx.status = 403;
-  } else {
-    if (users.length) {
-      cnx.body = users[0];
-      cnx.status = 201;
+    let id = cnx.params.id
+    let users = await model.getById(id);
+    const permission = can.read(payload, users[0]);
+    if (!permission.granted || verify != true) {
+      cnx.status = 403;
     } else {
-      cnx.status = 404;
+      if (users.length) {
+        cnx.body = users;
+        cnx.status = 201;
+      } else {
+        cnx.status = 404;
+      }
     }
-  }
   } else {
     cnx.status = 403;
   }

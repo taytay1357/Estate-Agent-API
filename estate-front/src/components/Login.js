@@ -45,7 +45,7 @@ function onTrigger(values, setLoggedIn) {
    .then(json)
    .then(data => {
       console.log(data)
-      const jwtObject = {jwt: data.token, expiresIn: data.expiresIn, admin: data.admin};
+      const jwtObject = {token: data.token, expiresIn: data.expiresIn, admin: data.admin};
       localStorage.setItem('jwt', JSON.stringify(jwtObject)) 
       alert("User logged in")
    })

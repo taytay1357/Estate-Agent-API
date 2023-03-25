@@ -10,7 +10,7 @@ function Nav(props) {
        const jwt = getFromLocal(props.setLoggedIn)
          let url, title;
          if (jwt !== undefined && props.loggedIn == true) {
-            const decoded = decodeJWT(jwt);
+            const decoded = decodeJWT(jwt.token);
             url = `/users/${decoded.sub}`
             title = "Profile"
          } else {

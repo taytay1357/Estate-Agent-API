@@ -43,13 +43,17 @@ function issueJWT(user) {
  * @returns {boolean} - an indicator to whether the jwt is valid
  */
 function verifyJWT(signedJWT) {
-   const verifyJWT = jwt.verify(signedJWT, PUB_KEY, {algorithms: ['RS256']}, (err, payload) => {
-      if (err) {
-         return false;
+      signedJWT = signedJWT.replace("Bearer ", "");
+      let verdict;
+      jwt.verify(signedJWT, PUB_KEY, {algorithms: ['RS256']}, (err, payload) => {
+      if (payload !== undefined) {
+         verdict = true;
       } else {
-         return true;
+         verdict = false;
       }
-   });
+      
+      });
+      return verdict;
 }
 
 /**

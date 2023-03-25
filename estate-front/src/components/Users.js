@@ -7,11 +7,12 @@ import decodeJWT from '../front_helper/jwt_helper';
 
 function Users(props) {
    const [userData, setUserData] = useState({})
+   const user_array = []
    if (props.loggedIn == true) {
       const jwt = getFromLocal(props.setLoggedIn);
    if (jwt !== undefined && jwt) {
-      const payload = decodeJWT(jwt)
-      if (payload.admin == true) {
+      const payload = decodeJWT(jwt.token)
+      if (payload.role == "admin") {
          fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users', {
          method: "GET",
          headers: {
@@ -26,7 +27,6 @@ function Users(props) {
             setUserData(data)
          })
          .catch(errorResponse => {
-            
             console.error(errorResponse);
             alert(`Error: ${errorResponse}`);
          })
@@ -50,18 +50,21 @@ function Users(props) {
             alert(`Error: ${errorResponse}`);
          })
       }
+      for (let i=0; i<userData.length; i++){
+         user_array.push(userData[i])
+      }
       return (
          <div className="user_elements_holder">
-            {userData.map(element => {
+            {user_array.map(element => (
                <div>
-                  <h1 className="user_elements">Welcome to the user profile page</h1>
-                  <Typography className="user_elements">USER ID: {element.ID}</Typography>
-                  <Typography className="user_elements">FIRST NAME: {element.firstName}</Typography>
-                  <Typography className="user_elements">LAST NAME: {element.lastName}</Typography>
-                  <Typography className="user_elements">USERNAME: {element.username}</Typography>
-                  <Typography className="user_elements">EMAIL: {element.email}</Typography>
+                  <h1 className="user_heading">Welcome to the user profile page</h1>
+                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
+                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
+                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
+                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
                </div>
-            })}
+            ))}
          </div>
          
          
