@@ -27,6 +27,8 @@ function App() {
             <Route path="/users/" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/register" element={<Register loggedIn={loggedIn} />} />
             <Route path="/login" element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/:id" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
           </Routes>

@@ -15,7 +15,7 @@ router.post('/', bodyParser(), validateAgent ,createAgent);
 router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
 router.get('/:id([0-9]{1,})', auth ,getById);
 router.put('/:id([0-9]{1,})', auth ,bodyParser(), validateAgent, updateAgent);
-router.del('/:id([0-9]{1,})', auth ,deleteAgent);
+router.del('/:id([0-9]{1,})', auth , deleteAgent);
 
 //Now we define handler functions used above.
 
@@ -42,6 +42,7 @@ async function getAll(cnx) {
   
 }
 async function getById(cnx) {
+  console.log("HIT")
   const jwt = cnx.request.header.authorization;
   if (jwt) {
      const verify = jwtUtils.verifyJWT(jwt)

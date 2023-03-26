@@ -11,8 +11,14 @@ function Nav(props) {
          let url, title;
          if (jwt !== undefined && props.loggedIn == true) {
             const decoded = decodeJWT(jwt.token);
-            url = `/users/${decoded.sub}`
-            title = "Profile"
+            if (decoded.role == "user") {
+               url = `/users/${decoded.sub}`
+               title = "Profile"
+            } else {
+               url = `/agents/${decoded.sub}`
+               title = `Agent Profile`
+            }
+            
          } else {
             url = '/login'
             title = "Login"
