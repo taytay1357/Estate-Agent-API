@@ -93,6 +93,7 @@ function onTrigger(values) {
 function Register(props) {
    return (
       <div>
+         <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>User register page.</Typography>
          <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
             <Form.Item hasFeedback {...tailFormItemLayout} name="email" rules={emailRules} label="E-mail">
                <Input/>

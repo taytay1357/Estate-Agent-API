@@ -58,6 +58,7 @@ function onTrigger(values, setLoggedIn) {
 function Login(props) {
    return (
       <div>
+          <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>User login page.</Typography>
          <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
             <Form.Item hasFeedback {...tailFormItemLayout} name="username" rules={usernameRules} label="Username">
                <Input/>

@@ -53,25 +53,27 @@ return Promise.reject('The passwords that you entered do not match!');
 
 ];
 
-const usernameRules = [
+const nameRules = [
 
 { required: true, message: 'Please input your username!', whitespace: true }
 
 ]
 
-const firstnameRules = [
-   {required: true, message: 'Please input your firstname', whitespace: true}
+const telephoneRules = [
+
+{ required: true, message: 'Please input your telephone!', whitespace: true }
+
+]
+const locationRules = [
+   {required: true, message: 'Please input your location!', whitespace: true}
 ]
 
-const lastnameRules = [
-   {required: true, message: 'Please input your firstname', whitespace: true}
-]
 
 function onTrigger(values) {
    
    const {confirm, ...data} = values;
    console.log('Received values from form: ', data);
-   fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users', {
+   fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -82,17 +84,19 @@ function onTrigger(values) {
    .then(json)
    .then(data => {
       console.log(data)
-      alert("User added")
+      alert("Agent added")
    })
    .catch(errorResponse => {
       console.error(errorResponse);
+      console.log(errorResponse.status)
       alert(`Error: ${errorResponse}`);
    })
 }
 
-function Register(props) {
+function AgentRegister(props) {
    return (
       <div>
+         <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>Agent register page.</Typography>
          <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
             <Form.Item hasFeedback {...tailFormItemLayout} name="email" rules={emailRules} label="E-mail">
                <Input/>
@@ -103,13 +107,13 @@ function Register(props) {
             <Form.Item {...tailFormItemLayout} hasFeedback name="confirm" rules={confirmRules} label="Confirm Password">
                <Input.Password/>
             </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="username" rules={usernameRules} label="Username">
+            <Form.Item {...tailFormItemLayout} hasFeedback name="name" rules={nameRules} label="Name">
                <Input/>
             </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="firstName" rules={firstnameRules} label="First Name">
+            <Form.Item {...tailFormItemLayout} hasFeedback name="location" rules={locationRules} label="Location">
                <Input/>
             </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="lastName" rules={lastnameRules} label="Last Name">
+            <Form.Item {...tailFormItemLayout} hasFeedback name="telephone" rules={telephoneRules} label="Telephone">
                <Input/>
             </Form.Item>
             <Form.Item hasFeedback {...tailFormItemLayout}>
@@ -118,7 +122,7 @@ function Register(props) {
                </Button>
             </Form.Item>
          </Form>
-         <Typography>Already have an account?<a href="/login"> Login</a></Typography>
+         <Typography>Already have an account?<a href="/agent_login"> Login</a></Typography>
       </div>
    )
 }
@@ -147,4 +151,4 @@ return response.json(); // note this returns a promise
 
 }
 
-export default Register;
+export default AgentRegister;

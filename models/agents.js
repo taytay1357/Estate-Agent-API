@@ -39,6 +39,7 @@ exports.getAll = async function getAll (page=1, limit=10, order) {
  * @returns {object|array} usually an array containing insert id etc of the record inserted 
  */
 exports.add = async function createAgent (agent) {
+  agent.role = "agent"
   let query = "INSERT INTO agents SET ?";
   let data = await db.run_query(query, agent);
   return data;
