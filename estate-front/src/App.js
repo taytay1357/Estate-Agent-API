@@ -5,6 +5,7 @@ import Register from './components/Register'
 import Nav from './components/Nav'
 import Login from './components/Login'
 import Users from './components/Users'
+import Agents from './components/Agent'
 import AgentLogin from './components/AgentLogin'
 import AgentRegister from './components/AgentRegister'
 import { Layout } from 'antd';
@@ -27,8 +28,8 @@ function App() {
             <Route path="/users/" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/register" element={<Register loggedIn={loggedIn} />} />
             <Route path="/login" element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
-            <Route path="/agents/:id" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
-            <Route path="/agents/" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/:id" element={<Agents loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/" element={<Agents loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
           </Routes>

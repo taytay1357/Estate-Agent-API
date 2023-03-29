@@ -1,10 +1,13 @@
+import decodeJWT from './jwt_helper'
+
 export default function getFromLocal(setLoggedIn) {
    let jwt = localStorage.getItem('jwt');
-   jwt = JSON.parse(jwt);
    if (jwt !== undefined && jwt) {
-      const now = Date.now()
+      jwt = JSON.parse(jwt);
+      const payload = decodeJWT(jwt.token);
+      let now = Date.now()
       setLoggedIn(true)
-      if (jwt.expiresIn >= now) {
+      if (now >= payload.exp) {
          setLoggedIn(false)
          localStorage.removeItem('jwt');
       } else {

@@ -5,7 +5,7 @@ import decodeJWT from '../front_helper/jwt_helper';
 
 
 
-function Users(props) {
+function Agents(props) {
    const [userData, setUserData] = useState({})
    const user_array = []
    if (props.loggedIn == true) {
@@ -13,7 +13,7 @@ function Users(props) {
    if (jwt !== undefined && jwt) {
       const payload = decodeJWT(jwt.token);
       if (payload.role == "admin") {
-         fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users', {
+         fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents', {
          method: "GET",
          headers: {
             "Content-Type": "application/json",
@@ -35,7 +35,7 @@ function Users(props) {
          }
       } else {
          
-         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${payload.sub}`, {
+         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents/${payload.sub}`, {
          method: "GET",
          headers: {
             "Content-Type": "application/json",
@@ -61,10 +61,10 @@ function Users(props) {
             {user_array.map(element => (
                <div>
                   <h1 className="user_heading">Welcome to the user profile page</h1>
-                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
-                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
-                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
-                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
+                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
+                  <Typography className="user_elements">Name: <Typography className="class_fields">{element.name}</Typography></Typography>
+                  <Typography className="user_elements">Location: <Typography className="class_fields">{element.location}</Typography></Typography>
+                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{element.telephone}</Typography></Typography>
                   <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
                </div>
             ))}
@@ -75,7 +75,7 @@ function Users(props) {
    }   
    } else {
       return(
-         <Typography>You are not logged in please sign in <a href="/login">here</a></Typography>
+         <Typography>You are not logged in please sign in <a href="/agent_login">here</a></Typography>
       )
       
    }
@@ -109,4 +109,4 @@ return response.json(); // note this returns a promise
 
 }
 
-export default Users;
+export default Agents;

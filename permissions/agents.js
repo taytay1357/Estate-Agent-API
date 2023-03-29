@@ -10,7 +10,7 @@ ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).exec
 ac.grant('admin').execute('read').on('agent');
 ac.grant('admin').execute('read').on('agents');
 ac.grant('admin').execute('update').on('agent');
-ac.grant('admin').condition({Fn: 'NOT_EQUALS', args: {'requester': '$.owner'}}).execute('delete').on('user');
+ac.grant('admin').condition({Fn: 'NOT_EQUALS', args: {'requester': '$.owner'}}).execute('delete').on('agent');
 
 exports.readAll = (requester) =>
    ac.can(requester.role).execute('read').sync().on('agents');
