@@ -6,7 +6,7 @@ const bodyParser = require('koa-bodyparser');
 const passwordUtils = require('../helpers/passwordHelpers');
 const jwtUtils = require('../helpers/jsonwebtoken');
 const auth = require('../controllers/auth');
-const {validateUser, validateUserLogin} = require('../controllers/validation');
+const {validateUser, validateUserLogin, validateUpdatedUser} = require('../controllers/validation');
 const can = require('../permissions/users');
 const router = Router({prefix: '/api/v1/users'});
 
@@ -15,7 +15,7 @@ router.get('/', auth ,getAll);
 router.post('/', bodyParser(), validateUser, createUser);
 
 router.get('/:id([0-9]{1,})', auth ,getById);
-router.put('/:id([0-9]{1,})', bodyParser(), auth , validateUser, updateUser);
+router.put('/:id([0-9]{1,})', bodyParser(), auth , validateUpdatedUser, updateUser);
 router.del('/:id([0-9]{1,})', auth , deleteUser); 
 router.post('/login', bodyParser(), validateUserLogin, userLogin)
 
@@ -138,12 +138,14 @@ async function updateUser(cnx) {
     cnx.status = 403;
   } else {
     //receive request body and assign it to a new article variable
-    let {username, email, first, last, avatarURL, password} = cnx.request.body;
-    newPassword = passwordUtils.genPassword(password);
-    password = newPassword.hash;
-    passwordSalt = newPassword.salt;
-    let updatedUser = {username: username, email: email, firstName: first, lastName: last, avatarURL: avatarURL, password: password, passwordSalt: passwordSalt}
-    let result = await model.update(updatedUser, id)
+    let {...values} = cnx.request.body;
+    console.log(values)
+    if (values.password) {
+      newPassword = passwordUtils.genPassword(values.password);
+      values.password = newPassword.hash;
+      values.passwordSalt = newPassword.salt;
+    }
+    let result = await model.update(values, id)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: "record has been updated"}

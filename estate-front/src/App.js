@@ -10,6 +10,7 @@ import AgentLogin from './components/AgentLogin'
 import AgentRegister from './components/AgentRegister'
 import Logout from './components/Logout'
 import { Layout } from 'antd';
+import getFromLocal from './front_helper/helper';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout;
 

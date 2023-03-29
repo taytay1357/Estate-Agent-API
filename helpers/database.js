@@ -25,8 +25,8 @@ exports.run_query = async function run_query(query, values) {
     return data;
   } catch(err) {
     const errorId = uuidv4();
-    console.error(Date.now(), errorId, values, error.message);
-    throw new DatabaseException("Database error", error.code, errorId);
+    console.error(Date.now(), errorId, values, err.message);
+    throw new DatabaseException("Database error", err.code, errorId);
   }
 }
 

@@ -11,6 +11,7 @@ const agentSchema = require('../schemas/agents.json').definitions.agent;
 const agentLoginSchema = require('../schemas/login.json').definitions.agent;
 const userSchema = require('../schemas/users.json').definitions.user;
 const loginSchema = require('../schemas/login.json').definitions.user;
+const updateUserSchema = require('../schemas/users.json').definitions.userUpdated;
 const v = new Validator();
 
 
@@ -112,6 +113,41 @@ exports.validateUser = async (ctx, next) => {
       }
    }
 }
+
+/**
+ * Wrapper that returns a Koa middleware validator for the update user schema
+ * @param {object} schema - The JSON schema definition for the user resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
+
+exports.validateUpdatedUser = async (ctx, next) => {
+
+   const validationOptions = {
+      throwError: true,
+      allowUnknownAttributes: false
+   };
+
+   const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateUser
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
+
+   try {
+      v.validate(body, updateUserSchema, validationOptions);
+      await next();
+   } catch(error) {
+      if (error instanceof ValidationError) {
+         ctx.body = error;
+         ctx.status = 400;
+      } else {
+         throw error;
+      }
+   }
+}
+
 /**
  * Wrapper that returns a Koa middleware validator for the user login schema
  * @param {object} schema - The JSON schema definition for the user login resource

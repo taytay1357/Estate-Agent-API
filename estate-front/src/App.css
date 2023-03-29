@@ -9,6 +9,11 @@
    background-color: white;
 }
 
+.user_elements_holder {
+   overflow: scroll;
+   padding: 1vw
+}
+
 .user_elements {
    font-size: 1vw;
    font-weight: bold;

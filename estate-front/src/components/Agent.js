@@ -6,7 +6,6 @@ import decodeJWT from '../front_helper/jwt_helper';
 
 function Agents(props) {
    const [agentData, setAgentData] = useState([])
-   const agent_list = []
       if (props.loggedIn == true) {
          const jwt = getFromLocal(props.setLoggedIn);
       if (jwt !== undefined && jwt) {
@@ -47,11 +46,6 @@ function Agents(props) {
          })
       }
       
-     for (let i=0; i<agentData.length; i++)
-     {
-        agent_list.push(agentData[i])
-        console.log(agentData[i])
-     }
       return (
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>

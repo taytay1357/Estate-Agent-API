@@ -7,7 +7,7 @@ export default function getFromLocal(setLoggedIn) {
       const payload = decodeJWT(jwt.token);
       let now = Date.now()
       setLoggedIn(true)
-      if (now >= payload.exp) {
+      if (now >= payload.exp * 1000) {
          setLoggedIn(false)
          localStorage.removeItem('jwt');
       } else {
