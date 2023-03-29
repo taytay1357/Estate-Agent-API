@@ -36,6 +36,8 @@ function App() {
             <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/properties" element={<Property loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            
             <Route path="*" element={<Navigate to='/' />} /> 
           </Routes>
         </Content >

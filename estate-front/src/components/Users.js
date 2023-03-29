@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Typography, Form, Input, Button } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
+import { DeleteOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
 
 const formItemLayout = {
 
@@ -142,7 +144,8 @@ function Users(props) {
       for (let i=0; i<userData.length; i++){
          user_array.push(userData[i])
       }
-      return (
+      if (payload.role == "user") {
+         return (
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the user profile page</h1>
             {user_array.map(element => (
@@ -186,17 +189,45 @@ function Users(props) {
          
          
       )
-   }   
+      } else {
+         return (
+            <div className="user_elements_holder">
+            {user_array.map(element => (
+               <div className="user_holder">
+                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
+                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
+                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
+                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium" shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
+                     fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${element.ID}`, {
+                        method: 'DELETE',
+                        headers: {
+                           "Content-Type": 'application/json',
+                           "Authorization": jwt.token
+                        }
+                     })
+                     .then(status)
+                     .then(json)
+                     .then(data => {
+                        alert("User Deleted")
+                     })
+                     .catch(errorResponse => {
+                         console.error(errorResponse);
+                     })
+                  }}/></div>
+               </div>
+            ))}
+            </div>
+         )
+      }
    } else {
       return(
          <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>You are not logged in please sign in <a href="/login">here</a></Typography>
       )
-      
+          
    }
-
-   
-   
-
+   }
 }
 
 function status(response) {
