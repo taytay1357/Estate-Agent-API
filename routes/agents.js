@@ -43,19 +43,19 @@ async function getAll(cnx) {
   
 }
 async function getById(cnx) {
-  console.log("HIT")
   const jwt = cnx.request.header.authorization;
   if (jwt) {
      const verify = jwtUtils.verifyJWT(jwt)
   const payload = jwtUtils.decodeJWT(jwt);
   //Get the ID from the route parameters.
   let id = cnx.params.id
+  id = Number(id)
   id = {ID: id};
   const permission = can.read(payload, id)
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
-    let agents = await model.getById(id);
+    let agents = await model.getById(id.ID);
     if (agents.length) {
       cnx.body = agents[0];
       cnx.status = 201;

@@ -6,7 +6,7 @@ import decodeJWT from '../front_helper/jwt_helper';
 
 
 function Agents(props) {
-   const [userData, setUserData] = useState({})
+   const [agentData, setAgentData] = useState({})
    const user_array = []
    if (props.loggedIn == true) {
       const jwt = getFromLocal(props.setLoggedIn);
@@ -26,14 +26,14 @@ function Agents(props) {
          .then(json)
          .then(data => {
             console.log(data)
-            setUserData(data)
+            setAgentData(data)
          })
          .catch(errorResponse => {
             console.error(errorResponse);
             alert(`Error: ${errorResponse}`);
          })
-         for (let i=0; i<userData.length; i++){
-         user_array.push(userData[i])
+         for (let i=0; i<agentData.length; i++){
+         user_array.push(agentData[i])
          }
       } else {
          
@@ -48,15 +48,15 @@ function Agents(props) {
          .then(json)
          .then(data => {
             console.log(data)
-            setUserData(data)
+            setAgentData(data)
          })
          .catch(errorResponse => {
             console.error(errorResponse);
             alert(`Error: ${errorResponse}`);
          })
+         for (let i=0; i<agentData.length; i++){
+         user_array.push(agentData[i])
       }
-      for (let i=0; i<userData.length; i++){
-         user_array.push(userData[i])
       }
       return (
          <div className="user_elements_holder">

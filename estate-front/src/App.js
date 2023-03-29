@@ -16,7 +16,8 @@ const { Header, Content, Footer } = Layout;
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [current, setCurrent] = useState('home');
-  return (
+  if (loggedIn == true) {
+    return (
     <Router>
       <Layout className="App">
         <Header style={{ backgroundColor: 'white', width: '70%'}}>
@@ -40,6 +41,31 @@ function App() {
       </Layout>
     </Router>
   );
+  }
+  return (
+    <Router>
+      <Layout className="App">
+        <Header style={{ backgroundColor: 'white', width: '70%'}}>
+          <Nav current={current} setCurrent={setCurrent} loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+        </Header>
+        <Content style={{ backgroundColor: 'white' }}>
+          <Routes>
+            <Route path="/" element={<Home loggedIn={loggedIn}/>} />
+            <Route path="/users/:id" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/users/" element={<Users loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/register" element={<Register loggedIn={loggedIn} />} />
+            <Route path="/login" element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/:id" element={<Agents loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agents/" element={<Agents loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+          </Routes>
+        </Content >
+      </Layout>
+    </Router>
+  );
+  
 }
 
 export default App;
