@@ -176,7 +176,10 @@ function Users(props) {
             </Form.Item>
             <Form.Item {...tailFormItemLayout} hasFeedback name="lastName" rules={lastnameRules} label="Last Name">
                <Input/>
-            </Form.Item> 
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="avatarURL" rules={lastnameRules} label="Avatar URL">
+               <Input/>
+            </Form.Item>  
             <Form.Item hasFeedback {...tailFormItemLayout}>
                <Button type="primary" htmlType="submit">
                   Update
@@ -199,7 +202,7 @@ function Users(props) {
                   <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
                   <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
                   <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
-                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium" shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium"shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
                      fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${element.ID}`, {
                         method: 'DELETE',
                         headers: {

@@ -9,6 +9,8 @@ import Agents from './components/Agent'
 import AgentLogin from './components/AgentLogin'
 import AgentRegister from './components/AgentRegister'
 import Logout from './components/Logout'
+import Property from './components/Property'
+import CreateProperty from './components/CreateProperty'
 import { Layout } from 'antd';
 import getFromLocal from './front_helper/helper';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
@@ -37,7 +39,7 @@ function App() {
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/properties" element={<Property loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
-            
+            <Route path="/properties/create" element={<CreateProperty loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="*" element={<Navigate to='/' />} /> 
           </Routes>
         </Content >

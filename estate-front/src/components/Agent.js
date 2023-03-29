@@ -116,7 +116,10 @@ function Agents(props) {
             </Form.Item>
             <Form.Item {...tailFormItemLayout} hasFeedback name="telephone" label="Telephone">
                <Input/>
-            </Form.Item> 
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="avatarURL"  label="Avatar URL">
+               <Input/>
+            </Form.Item>  
             <Form.Item hasFeedback {...tailFormItemLayout}>
                <Button type="primary" htmlType="submit">
                   Update

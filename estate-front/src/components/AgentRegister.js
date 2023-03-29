@@ -116,6 +116,9 @@ function AgentRegister(props) {
             <Form.Item {...tailFormItemLayout} hasFeedback name="telephone" rules={telephoneRules} label="Telephone">
                <Input/>
             </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="avatarURL" label="Avatar URL">
+               <Input/>
+            </Form.Item> 
             <Form.Item hasFeedback {...tailFormItemLayout}>
                <Button type="primary" htmlType="submit">
                   Register
