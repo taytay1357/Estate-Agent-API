@@ -28,11 +28,7 @@ function Users(props) {
          })
          .catch(errorResponse => {
             console.error(errorResponse);
-            alert(`Error: ${errorResponse}`);
          })
-         for (let i=0; i<userData.length; i++){
-         user_array.push(userData[i])
-         }
       } else {
          
          fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${payload.sub}`, {
@@ -50,7 +46,6 @@ function Users(props) {
          })
          .catch(errorResponse => {
             console.error(errorResponse);
-            alert(`Error: ${errorResponse}`);
          })
       }
       for (let i=0; i<userData.length; i++){
@@ -75,7 +70,7 @@ function Users(props) {
    }   
    } else {
       return(
-         <Typography>You are not logged in please sign in <a href="/login">here</a></Typography>
+         <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>You are not logged in please sign in <a href="/login">here</a></Typography>
       )
       
    }

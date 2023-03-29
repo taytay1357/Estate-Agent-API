@@ -1,20 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Typography } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
 
 
-
 function Agents(props) {
-   const [agentData, setAgentData] = useState({})
-   const user_array = []
-   if (props.loggedIn == true) {
-      const jwt = getFromLocal(props.setLoggedIn);
-      console.log(jwt.token)
-   if (jwt !== undefined && jwt) {
+   const [agentData, setAgentData] = useState([])
+   const agent_list = []
+      if (props.loggedIn == true) {
+         const jwt = getFromLocal(props.setLoggedIn);
+      if (jwt !== undefined && jwt) {
       const payload = decodeJWT(jwt.token);
-      console.log(payload)
       if (payload.role == "admin") {
+         
          fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents', {
          method: "GET",
          headers: {
@@ -25,16 +23,11 @@ function Agents(props) {
          .then(status)
          .then(json)
          .then(data => {
-            console.log(data)
-            setAgentData(data)
+            setAgentData([data])
          })
          .catch(errorResponse => {
             console.error(errorResponse);
-            alert(`Error: ${errorResponse}`);
          })
-         for (let i=0; i<agentData.length; i++){
-         user_array.push(agentData[i])
-         }
       } else {
          
          fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents/${payload.sub}`, {
@@ -47,21 +40,22 @@ function Agents(props) {
          .then(status)
          .then(json)
          .then(data => {
-            console.log(data)
-            setAgentData(data)
+            setAgentData([data])
          })
          .catch(errorResponse => {
             console.error(errorResponse);
-            alert(`Error: ${errorResponse}`);
          })
-         for (let i=0; i<agentData.length; i++){
-         user_array.push(agentData[i])
       }
-      }
+      
+     for (let i=0; i<agentData.length; i++)
+     {
+        agent_list.push(agentData[i])
+        console.log(agentData[i])
+     }
       return (
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
-            {user_array.map(element => (
+            {agentData.map(element => (
                <div className="user_holder">
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{element.name}</Typography></Typography>
@@ -73,18 +67,14 @@ function Agents(props) {
          </div>
          
          
-      )
-   }   
+      )  
    } else {
       return(
-         <Typography>You are not logged in please sign in <a href="/agent_login">here</a></Typography>
+         <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>You are not logged in please sign in <a href="/agent_login">here</a></Typography>
       )
       
    }
-
-   
-   
-
+   }
 }
 
 function status(response) {

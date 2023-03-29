@@ -10,13 +10,13 @@ import AgentLogin from './components/AgentLogin'
 import AgentRegister from './components/AgentRegister'
 import Logout from './components/Logout'
 import { Layout } from 'antd';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout;
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [current, setCurrent] = useState('home');
-  if (loggedIn == true) {
+  if (loggedIn == false) {
     return (
     <Router>
       <Layout className="App">
@@ -35,14 +35,15 @@ function App() {
             <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="*" element={<Navigate to='/' />} /> 
           </Routes>
         </Content >
         <Footer style={{ textAlign: 'center', backgroundColor: 'white', width: '70%', fontWeight: 'bold'}}>If you are one of our agents and need to access the agent login portal click <a href="/agent_login">here.</a></Footer>
       </Layout>
     </Router>
   );
-  }
-  return (
+  } else {
+      return (
     <Router>
       <Layout className="App">
         <Header style={{ backgroundColor: 'white', width: '70%'}}>
@@ -66,6 +67,8 @@ function App() {
     </Router>
   );
   
+  }
+ 
 }
 
 export default App;
