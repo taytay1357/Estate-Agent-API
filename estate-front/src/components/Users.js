@@ -58,9 +58,9 @@ function Users(props) {
       }
       return (
          <div className="user_elements_holder">
+         <h1 className="user_heading">Welcome to the user profile page</h1>
             {user_array.map(element => (
-               <div>
-                  <h1 className="user_heading">Welcome to the user profile page</h1>
+               <div className="user_holder">
                   <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
                   <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
                   <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>

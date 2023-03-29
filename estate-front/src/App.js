@@ -8,6 +8,7 @@ import Users from './components/Users'
 import Agents from './components/Agent'
 import AgentLogin from './components/AgentLogin'
 import AgentRegister from './components/AgentRegister'
+import Logout from './components/Logout'
 import { Layout } from 'antd';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 const { Header, Content, Footer } = Layout;
@@ -32,6 +33,7 @@ function App() {
             <Route path="/agents/" element={<Agents loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_login" element={<AgentLogin loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
             <Route path="/agent_register" element={<AgentRegister loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
+            <Route path="/logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>} />
           </Routes>
         </Content >
         <Footer style={{ textAlign: 'center', backgroundColor: 'white', width: '70%', fontWeight: 'bold'}}>If you are one of our agents and need to access the agent login portal click <a href="/agent_login">here.</a></Footer>

@@ -23,6 +23,7 @@ async function getAll(cnx) {
   const jwt = cnx.request.header.authorization;
   if (jwt) {
     const verify = jwtUtils.verifyJWT(jwt)
+    console.log(verify)
     const payload = jwtUtils.decodeJWT(jwt);
     const permission = can.readAll(payload);
     if (!permission.granted || verify != true) {

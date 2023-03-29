@@ -10,8 +10,10 @@ function Agents(props) {
    const user_array = []
    if (props.loggedIn == true) {
       const jwt = getFromLocal(props.setLoggedIn);
+      console.log(jwt.token)
    if (jwt !== undefined && jwt) {
       const payload = decodeJWT(jwt.token);
+      console.log(payload)
       if (payload.role == "admin") {
          fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents', {
          method: "GET",
@@ -58,9 +60,9 @@ function Agents(props) {
       }
       return (
          <div className="user_elements_holder">
+         <h1 className="user_heading">Welcome to the agent profile page</h1>
             {user_array.map(element => (
-               <div>
-                  <h1 className="user_heading">Welcome to the user profile page</h1>
+               <div className="user_holder">
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{element.name}</Typography></Typography>
                   <Typography className="user_elements">Location: <Typography className="class_fields">{element.location}</Typography></Typography>

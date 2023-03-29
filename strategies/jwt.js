@@ -3,6 +3,7 @@ ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs')
 const path = require('path')
 const users = require('../models/users')
+const agents = require('../models/agents')
 
 const opts = {}
 
@@ -19,19 +20,34 @@ opts.algorithms = ['RS256']
 const strategy = new JwtStrategy(opts, async (payload, done)  => {
   //passing a user id through payload and therefore now need to do a lookup to see if there is an existing user
   //we can use our export from the users model
-   let id = payload.sub
-   try {
-      result = await users.getById(id);
-   } catch (error) {
-      console.log(`Error during authentication for user ${username}`);
-      return done(error, null)
-  }
-   if (result.length) {
-      const user = result[0]
-      return done(null, user)
-   } else {
-      return done(null, false)
+   if (payload.role == 'agent') {
+      let id = payload.sub
+      try {
+         result = await agents.getById(id);
+      } catch (error) {
+         return done(error, null)
    }
+      if (result.length) {
+         const agent = result[0]
+         return done(null, agent)
+      } else {
+         return done(null, false)
+      }
+   } else {
+      let id = payload.sub
+      try {
+         result = await users.getById(id);
+      } catch (error) {
+         return done(error, null)
+   }
+      if (result.length) {
+         const user = result[0]
+         return done(null, user)
+      } else {
+         return done(null, false)
+      }
+   }
+   
 })
 
 
