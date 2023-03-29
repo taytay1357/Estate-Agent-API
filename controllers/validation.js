@@ -9,6 +9,7 @@ const {Validator, ValidationError} = require('jsonschema');
 const propertySchema = require('../schemas/property.json');
 const agentSchema = require('../schemas/agents.json').definitions.agent;
 const agentLoginSchema = require('../schemas/login.json').definitions.agent;
+const agentUpdated = require('../schemas/agents.json').definitions.agentUpdated;
 const userSchema = require('../schemas/users.json').definitions.user;
 const loginSchema = require('../schemas/login.json').definitions.user;
 const updateUserSchema = require('../schemas/users.json').definitions.userUpdated;
@@ -203,6 +204,34 @@ exports.validateAgentLogin = async (ctx, next) => {
 
    try {
       v.validate(body, agentLoginSchema, validationOptions);
+      await next();
+   } catch(error) {
+      if (error instanceof ValidationError) {
+         ctx.body = error;
+         ctx.status = 400;
+      } else {
+         throw error;
+      }
+   }
+}
+
+exports.validateUpdatedAgent = async (ctx, next) => {
+
+   const validationOptions = {
+      throwError: true,
+      allowUnknownAttributes: false
+   };
+
+   const body = ctx.request.body;
+    /**
+    * Koa middleware handler function to validateAgentLogin
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
+
+   try {
+      v.validate(body, agentUpdated, validationOptions);
       await next();
    } catch(error) {
       if (error instanceof ValidationError) {

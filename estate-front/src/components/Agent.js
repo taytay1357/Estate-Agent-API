@@ -1,9 +1,48 @@
 import React, {useState, useEffect} from 'react';
-import { Typography } from 'antd';
+import { Typography, Input, Form, Button } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
 
+const formItemLayout = {
 
+labelCol: { xs: { span: 24 }, sm: { span: 6 } },
+
+wrapperCol: { xs: { span: 24 }, sm: { span: 12 } }
+
+};
+
+const tailFormItemLayout = {
+
+wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } },
+
+};
+
+function onTrigger(values) {  
+   const {confirm, ...data} = values;
+   let jwt = localStorage.getItem('jwt');
+   jwt = JSON.parse(jwt);
+   const payload = decodeJWT(jwt.token);
+   fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents/${payload.sub}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": jwt.token
+      }
+   })
+   .then(status)
+   .then(json)
+   .then(data => {
+      console.log(data)
+      alert("Agent updated")
+   })
+   .catch(errorResponse => {
+      console.error(errorResponse);
+      alert(`Error: ${errorResponse}`);
+   })
+   
+   
+}
 function Agents(props) {
    const [agentData, setAgentData] = useState([])
       if (props.loggedIn == true) {
@@ -58,6 +97,33 @@ function Agents(props) {
                   <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
                </div>
             ))}
+             <h1 className="user_heading">Update your details...</h1>
+             <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
+            <Form.Item hasFeedback {...tailFormItemLayout} name="email" label="E-mail">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="password" label="Password">
+               <Input.Password/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="confirm" label="Confirm Password">
+               <Input.Password/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="name" label="Name">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="location" label="Location">
+               <Input/>
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout} hasFeedback name="telephone" label="Telephone">
+               <Input/>
+            </Form.Item> 
+            <Form.Item hasFeedback {...tailFormItemLayout}>
+               <Button type="primary" htmlType="submit">
+                  Update
+               </Button>
+            </Form.Item>
+            
+         </Form>
          </div>
          
          

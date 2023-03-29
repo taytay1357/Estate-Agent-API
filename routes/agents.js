@@ -3,7 +3,7 @@ const Router = require('koa-router')
 
 const model = require('../models/agents');
 const bodyParser = require('koa-bodyparser');
-const {validateAgent, validateAgentLogin} = require('../controllers/validation')
+const {validateAgent, validateAgentLogin, validateUpdatedAgent} = require('../controllers/validation')
 const router = Router({prefix: '/api/v1/agents'});
 const jwtUtils = require('../helpers/jsonwebtoken');
 const can = require('../permissions/agents');
@@ -14,7 +14,7 @@ router.get('/', auth ,getAll);
 router.post('/', bodyParser(), validateAgent ,createAgent);
 router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
 router.get('/:id([0-9]{1,})', auth ,getById);
-router.put('/:id([0-9]{1,})', auth ,bodyParser(), validateAgent, updateAgent);
+router.put('/:id([0-9]{1,})', auth ,bodyParser(), validateUpdatedAgent, updateAgent);
 router.del('/:id([0-9]{1,})', auth , deleteAgent);
 
 //Now we define handler functions used above.
@@ -123,18 +123,21 @@ async function updateAgent(cnx) {
     const payload = jwtUtils.decodeJWT(jwt);
   //first of all get the id of the article
   let id = cnx.params.id
+  id = Number(id);
   id = {ID: id};
   const permission = can.update(payload, id)
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
    //receive request body and assign it to a new article variable
-    let {name, location, avatarURL, telephone, email, password} = cnx.request.body;
-    newPassword = passwordUtils.genPassword(password);
-    password = newPassword.hash;
-    passwordSalt = newPassword.salt;
-    let updatedAgent = {name: name, location: location, avatarURL: avatarURL, telephone: telephone, email: email, password: password, passwordSalt: passwordSalt}
-    let result = await model.update(updatedAgent, id)
+    let {...values} = cnx.request.body;
+    console.log(values)
+    if (values.password) {
+      newPassword = passwordUtils.genPassword(values.password);
+      values.password = newPassword.hash;
+      values.passwordSalt = newPassword.salt;
+    }
+    let result = await model.update(values, id.ID)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been updated'}

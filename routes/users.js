@@ -139,13 +139,12 @@ async function updateUser(cnx) {
   } else {
     //receive request body and assign it to a new article variable
     let {...values} = cnx.request.body;
-    console.log(values)
     if (values.password) {
       newPassword = passwordUtils.genPassword(values.password);
       values.password = newPassword.hash;
       values.passwordSalt = newPassword.salt;
     }
-    let result = await model.update(values, id)
+    let result = await model.update(values, id.ID)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: "record has been updated"}
