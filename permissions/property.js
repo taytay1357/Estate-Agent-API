@@ -3,7 +3,7 @@ const ac = new AccessControl();
 
 
 ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).execute('update')
-   .on('property', ['name', 'price', 'address', 'bedrooms', 'bathrooms', 'description','imageURL']);
+   .on('property', ['ID' ,'name', 'price', 'address', 'bedrooms', 'bathrooms', 'description','imageURL']);
 
 ac.grant('agent').execute('create').on('property', ['name', 'price', 'address', 'bedrooms', 'bathrooms', 'description','imageURL']);
 
@@ -11,7 +11,6 @@ ac.grant('admin').execute('read').on('property');
 ac.grant('admin').execute('read').on('properties');
 ac.grant('admin').execute('update').on('property');
 ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).execute('delete').on('property');
-
 
 exports.create = (requester) =>
    ac.can(requester.role).execute('create').sync().on('property');

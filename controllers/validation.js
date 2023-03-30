@@ -6,7 +6,7 @@
  */
 
 const {Validator, ValidationError} = require('jsonschema');
-const propertySchema = require('../schemas/property.json');
+const propertySchema = require('../schemas/property.json').definitions.property;
 const agentSchema = require('../schemas/agents.json').definitions.agent;
 const agentLoginSchema = require('../schemas/login.json').definitions.agent;
 const agentUpdated = require('../schemas/agents.json').definitions.agentUpdated;

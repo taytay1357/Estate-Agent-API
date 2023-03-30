@@ -61,12 +61,11 @@ function onTrigger(values) {
 }
 
 export default function CreateProperty(props) {
-   if (props.loggedIn == true) {
-      const jwt = getFromLocal(props.setLoggedIn);
-      if (jwt !== undefined && jwt) {
-         console.log("inside if")
+   const jwt = getFromLocal(props.setLoggedIn);
+   if (jwt && props.loggedIn === true) {
          const payload = decodeJWT(jwt.token)
-         return (
+         if(payload.role == "agent"){
+            return (
             <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
             <Form.Item hasFeedback {...tailFormItemLayout} name="type" rules={typeRules} label="Type">
                <Input/>
@@ -99,7 +98,8 @@ export default function CreateProperty(props) {
             </Form.Item>
             </Form>   
          )
-      }
+         }
+         
    } else {
       return (
          <Typography className="user_heading">You are not allowed to be on this page!</Typography>

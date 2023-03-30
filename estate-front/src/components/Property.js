@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
@@ -5,6 +6,7 @@ import { Typography } from 'antd';
 
 export default function Property(props) {
    const [propertyData, setPropertyData] = useState([]);
+   const jwt = getFromLocal(props.setLoggedIn);
    fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties`, {
       method: "GET",
       headers: {
@@ -14,12 +16,10 @@ export default function Property(props) {
    .then(status)
    .then(json)
    .then(data => {
-      console.log(data)
       setPropertyData([data])
    })
    .catch(errorResponse => {
       console.error(errorResponse);
-      alert(`Error: ${errorResponse}`);
    })
    if (props.loggedIn == true) {
       const jwt = getFromLocal(props.setLoggedIn);
@@ -33,6 +33,7 @@ export default function Property(props) {
                   agentProperties.push(propertyData[i])
                }
             }
+            console.log(agentProperties)
             return (
                <div className="user_elements_holder">
                <h1 className="user_heading">Here are all your existing properties.</h1>
@@ -51,21 +52,20 @@ export default function Property(props) {
       }
       
 
-   } else {
+   }
       return (
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
             {propertyData.map(property => (
                <div className="user_holder">
-                  <Typography className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
-                  <Typography className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
-                  <Typography className="user_elements">Price: <Typography className="class_fields">{property.price}</Typography></Typography>
-                  <Typography className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                  <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
+                  <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
+                  <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">{property.price}</Typography></Typography>
+                  <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
                </div>
             ))}
          </div>
       )
-   }
 }
 
 
