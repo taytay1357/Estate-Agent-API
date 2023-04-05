@@ -13,7 +13,7 @@ const auth = require('../controllers/auth');
 router.get('/', auth ,getAll);
 router.post('/', bodyParser(), validateAgent ,createAgent);
 router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
-router.get('/:id([0-9]{1,})', auth ,getById);
+router.get('/:id([0-9]{1,})', getById);
 router.put('/:id([0-9]{1,})', auth ,bodyParser(), validateUpdatedAgent, updateAgent);
 router.del('/:id([0-9]{1,})', auth , deleteAgent);
 
@@ -43,30 +43,16 @@ async function getAll(cnx) {
   
 }
 async function getById(cnx) {
-  const jwt = cnx.request.header.authorization;
-  if (jwt) {
-     const verify = jwtUtils.verifyJWT(jwt)
-  const payload = jwtUtils.decodeJWT(jwt);
   //Get the ID from the route parameters.
   let id = cnx.params.id
-  id = Number(id)
-  id = {ID: id};
-  const permission = can.read(payload, id)
-  if (!permission.granted || verify != true) {
-    cnx.status = 403;
+  let agents = await model.getById(id);
+  console.log("HERE",agents)
+  if (agents.length) {
+    cnx.body = agents[0];
+    cnx.status = 201;
   } else {
-    let agents = await model.getById(id.ID);
-    if (agents.length) {
-      cnx.body = agents[0];
-      cnx.status = 201;
-    } else {
-      cnx.status = 404;
-    }
+    cnx.status = 404;
   }
-  } else {
-    cnx.status = 403;
-  }
- 
 }
 
 async function agentLogin(cnx) {

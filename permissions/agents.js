@@ -1,9 +1,6 @@
 const AccessControl = require('role-acl');
 const ac = new AccessControl();
 
-ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).execute('read')
-   .on('agent', ['*', '!password', '!passwordSalt']);
-
 ac.grant('agent').condition({Fn: 'EQUALS', args: {'requester': '$.owner'}}).execute('update')
    .on('agent', ['name', 'location', 'telephone', 'email', 'avatarURL', 'password', 'passwordSalt' ]);
 

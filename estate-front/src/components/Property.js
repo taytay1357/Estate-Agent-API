@@ -42,7 +42,7 @@ const [propertyData, setPropertyData] = useState({});
                   color: 'white'
                }, height: '10%', margin: '1vw', fontSize: '1vw', border: '1px solid gray'}}>Add Property</a>
                   {agentProperties.map(property => (
-                  <div className="user_holder">
+                  <a href={`/properties/${property.ID}`} className="user_holder">
                      <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
                      <Typography className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
                      <Typography className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
@@ -65,7 +65,7 @@ const [propertyData, setPropertyData] = useState({});
                          console.error(errorResponse);
                      })
                   }}/></div>
-                  </div>
+                  </a>
                   ))}
                
                </div>
@@ -81,13 +81,13 @@ const [propertyData, setPropertyData] = useState({});
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
             {property_data.map(property => (
-                  <div className="user_holder">
+                  <a className="user_holder" href={`/properties/${property.ID}`}>
                      <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
                      <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
-                  </div>
+                  </a>
             ))}
          </div>
       )
@@ -102,17 +102,18 @@ const [propertyData, setPropertyData] = useState({});
          {
             property_data.push(propertyData[i])
          }
-      return (
+         let url;
+         return (
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
             {property_data.map(property => (
-                  <div className="user_holder">
+                  <a className="user_holder" href={`/properties/${property.ID}`}>
                      <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
                      <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
                      <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
-                  </div>
+                  </a>
             ))}
          </div>
       )

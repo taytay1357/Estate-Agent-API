@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Typography, Input, Form, Button } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
+import { useParams } from 'react-router-dom';
 
 const formItemLayout = {
 
@@ -43,60 +44,43 @@ function onTrigger(values) {
    
    
 }
-function Agents(props) {
-   const [agentData, setAgentData] = useState([])
+export default function Agents(props) {
+      const params = useParams();
+      const id = params.id
+      const [agentData, setAgentData] = useState({})
+      useEffect(() => {
+         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents/${id}`, {
+         method: "GET",
+         headers: {
+            "Content-Type": "application/json"
+         }
+         })
+         .then(status)
+         .then(json)
+         .then(data => {
+            console.log(data)
+            setAgentData(data)
+         })
+         .catch(errorResponse => {
+            console.error(errorResponse);
+         })
+      })
+      
       if (props.loggedIn == true) {
          const jwt = getFromLocal(props.setLoggedIn);
       if (jwt !== undefined && jwt) {
       const payload = decodeJWT(jwt.token);
-      if (payload.role == "admin") {
-         
-         fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents', {
-         method: "GET",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": jwt.token
-         }
-         })
-         .then(status)
-         .then(json)
-         .then(data => {
-            setAgentData([data])
-         })
-         .catch(errorResponse => {
-            console.error(errorResponse);
-         })
-      } else {
-         
-         fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/agents/${payload.sub}`, {
-         method: "GET",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": jwt.token
-         }
-         })
-         .then(status)
-         .then(json)
-         .then(data => {
-            setAgentData([data])
-         })
-         .catch(errorResponse => {
-            console.error(errorResponse);
-         })
-      }
-      
-      return (
+      if (payload.role == "agent" && payload.sub == id) {
+               return (
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
-            {agentData.map(element => (
                <div className="user_holder">
-                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
-                  <Typography className="user_elements">Name: <Typography className="class_fields">{element.name}</Typography></Typography>
-                  <Typography className="user_elements">Location: <Typography className="class_fields">{element.location}</Typography></Typography>
-                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{element.telephone}</Typography></Typography>
-                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
+                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
+                  <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
+                  <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
+                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{agentData.telephone}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{agentData.email}</Typography></Typography>
                </div>
-            ))}
              <h1 className="user_heading">Update your details...</h1>
              <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
             <Form.Item hasFeedback {...tailFormItemLayout} name="email" label="E-mail">
@@ -128,15 +112,37 @@ function Agents(props) {
             
          </Form>
          </div>
+      ) 
+      }
          
-         
-      )  
-   } else {
-      return(
-         <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>You are not logged in please sign in <a href="/agent_login">here</a></Typography>
-      )
+      } else {
       
-   }
+         return (
+         <div className="user_elements_holder">
+         <h1 className="user_heading">Welcome to the agent profile page</h1>
+               <div className="user_holder">
+                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
+                  <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
+                  <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
+                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{agentData.telephone}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{agentData.email}</Typography></Typography>
+               </div>
+         </div>
+      )
+      }
+   } else {
+      return (
+         <div className="user_elements_holder">
+         <h1 className="user_heading">Welcome to the agent profile page</h1>
+               <div className="user_holder">
+                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
+                  <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
+                  <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
+                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{agentData.telephone}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{agentData.email}</Typography></Typography>
+               </div>
+         </div>
+      )
    }
 }
 
@@ -164,4 +170,4 @@ return response.json(); // note this returns a promise
 
 }
 
-export default Agents;
+

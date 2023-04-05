@@ -7,6 +7,7 @@
 
 const {Validator, ValidationError} = require('jsonschema');
 const propertySchema = require('../schemas/property.json').definitions.property;
+const propertyUpdated = require('../schemas/property.json').definitions.propertyUpdated;
 const agentSchema = require('../schemas/agents.json').definitions.agent;
 const agentLoginSchema = require('../schemas/login.json').definitions.agent;
 const agentUpdated = require('../schemas/agents.json').definitions.agentUpdated;
@@ -38,6 +39,39 @@ exports.validateProperty = async (ctx, next) => {
 
    try {
       v.validate(body, propertySchema, validationOptions);
+      await next();
+   } catch(error) {
+      if (error instanceof ValidationError) {
+         console.error(error)
+         ctx.body = error;
+         ctx.status = 400;
+      } else {
+         throw error;
+      }
+   }
+}
+/**
+ * Wrapper that returns a Koa middleware validator for the property schema
+ * @param {object} schema - The JSON schema definition for the property resource
+ * @returns {function} - A Koa middleware handler taking (ctx, next) params
+ */
+exports.validateUpdatedProperty = async (ctx, next) => {
+
+   const validationOptions = {
+      throwError: true,
+      allowUnknownAttributes: false
+   };
+
+   const body = ctx.request.body;
+   /**
+    * Koa middleware handler function to validateProperty
+    * @param {object} ctx - The Koa request/response context tokenObject
+    * @param {function} next - The Koa next callback
+    * @throws {ValidationError} a jsonschema library exception
+    */
+
+   try {
+      v.validate(body, propertyUpdated, validationOptions);
       await next();
    } catch(error) {
       if (error instanceof ValidationError) {

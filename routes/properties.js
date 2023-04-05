@@ -32,8 +32,9 @@ async function getById(cnx) {
   //Get the ID from the route parameters.
   let id = cnx.params.id
   let properties = await model.getById(id);
-  if (properties.length) {
-    cnx.body = properties[0];
+  let agent = await model.getAgent(id)
+  if (properties.length && agent.length) {
+    cnx.body = properties[0]
   }
 }
 
@@ -63,22 +64,24 @@ async function createProperty(cnx) {
 }
 
 async function updateProperty(cnx) {
+  console.log("made it to route")
   const jwt = cnx.request.header.authorization;
   if (jwt){
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   //first of all get the id of the article
   let id = cnx.params.id
-  id = parseInt(id)
-  id = {ID: id};
+  id = Number(id)
+  let agentID = await model.getAgent(id)
+  id = {ID: agentID.ID}
   const permission = can.update(payload, id);
+  console.log(permission)
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     //receive request body and assign it to a new article variable
-    let {type, price, address, bedrooms, bathrooms, description, imageURL} = cnx.request.body;
-    let updatedProperty = {type: type, price: price, address: address, bedrooms: bedrooms, bathrooms: bathrooms, imageURL: imageURL, description: description}
-    let result = await model.update(updatedProperty, id.ID)
+    let {...values} = cnx.request.body;
+    let result = await model.update(values, id.ID)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been updated'}
