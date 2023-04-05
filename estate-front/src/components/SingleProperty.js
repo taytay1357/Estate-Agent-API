@@ -21,11 +21,13 @@ wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } },
 
 function onTrigger(values) {  
    const  {...data} = values;
+   console.log(data)
    let jwt = localStorage.getItem('jwt');
    jwt = JSON.parse(jwt);
    const payload = decodeJWT(jwt.token);
    let url = window.location.href
-   url = url.replace('3000', '5000')
+   let id = url.split('properties/')[1]
+   url = `https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties/${id}`
    fetch(url, {
       method: "PUT",
       body: JSON.stringify(data),

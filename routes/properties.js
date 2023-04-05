@@ -3,7 +3,7 @@ const Router = require('koa-router')
 
 const model = require('../models/properties');
 const bodyParser = require('koa-bodyparser')
-const {validateProperty} = require('../controllers/validation')
+const {validateProperty, validateUpdatedProperty} = require('../controllers/validation')
 const router = Router({prefix: '/api/v1/properties'});
 const can = require('../permissions/property');
 const jwtUtils = require('../helpers/jsonwebtoken');
@@ -13,7 +13,7 @@ router.get('/', getAll);
 router.post('/', bodyParser(), auth ,validateProperty , createProperty);
 
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), auth ,validateProperty , updateProperty);
+router.put('/:id([0-9]{1,})', bodyParser(), auth , updateProperty);
 router.del('/:id([0-9]{1,})', auth ,deleteProperty);
 
 //Now we define handler functions used above.
@@ -73,7 +73,7 @@ async function updateProperty(cnx) {
   let id = cnx.params.id
   id = Number(id)
   let agentID = await model.getAgent(id)
-  id = {ID: agentID.ID}
+  id = {ID: agentID[0].ID}
   const permission = can.update(payload, id);
   console.log(permission)
   if (!permission.granted || verify != true) {
