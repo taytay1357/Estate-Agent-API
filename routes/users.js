@@ -8,7 +8,8 @@ const jwtUtils = require('../helpers/jsonwebtoken');
 const auth = require('../controllers/auth');
 const {validateUser, validateUserLogin, validateUpdatedUser} = require('../controllers/validation');
 const can = require('../permissions/users');
-const router = Router({prefix: '/api/v1/users'});
+const prefix = '/api/v1/users'
+const router = Router({prefix: prefix});
 
 
 router.get('/', auth ,getAll);
@@ -99,7 +100,7 @@ async function createUser(cnx) {
 async function userLogin(cnx) {
   
   const body = cnx.request.body;
-
+  
   let username = body.username;
   let user = await model.findByUsername(username)
 
@@ -107,7 +108,9 @@ async function userLogin(cnx) {
     cnx.status = 404;
     cnx.body = { success: false, msg: "could not find user"}
   }
-
+  const links = {
+    self: `${cnx.protocol}://${ctx.host}${prefix}/${ID}`
+  }
   user = user[0]
   const isValid = passwordUtils.validPassword(body.password, user.password, user.passwordSalt);
 
