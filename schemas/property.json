@@ -35,6 +35,10 @@
                "description": {
                   "description": "short description about the property",
                   "type": "string"
+               },
+               "imageURL": {
+                  "description": "URL to the image of the property",
+                  "type": "string"
                }
             },
             "required": ["type", "price", "address", "bedrooms", "bathrooms"],

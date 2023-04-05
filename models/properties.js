@@ -69,3 +69,13 @@ exports.delete = async function deleteProperty(id) {
   let data = await db.run_query(query, values);
   return data;
 }
+
+exports.getAgent = async function getAgent(id) {
+  let query = "SELECT agentID FROM properties WHERE ID= ?;"
+  let values = [id]
+  let data = await db.run_query(query, values);
+  query = "SELECT * FROM agents WHERE ID= ?;"
+  values = [data[0].agentID]
+  data = await db.run_query(query, values);
+  return data
+}

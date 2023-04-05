@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
-import { Typography } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Typography, Image, Button } from 'antd';
 
 export default function Property(props) {
-   const [propertyData, setPropertyData] = useState([]);
-   const jwt = getFromLocal(props.setLoggedIn);
+const [propertyData, setPropertyData] = useState({});
    fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties`, {
       method: "GET",
       headers: {
@@ -16,11 +16,12 @@ export default function Property(props) {
    .then(status)
    .then(json)
    .then(data => {
-      setPropertyData([data])
+      setPropertyData(data)
    })
    .catch(errorResponse => {
       console.error(errorResponse);
    })
+   const jwt = getFromLocal(props.setLoggedIn);
    if (props.loggedIn == true) {
       const jwt = getFromLocal(props.setLoggedIn);
       if (jwt !== undefined && jwt){
@@ -36,36 +37,87 @@ export default function Property(props) {
             console.log(agentProperties)
             return (
                <div className="user_elements_holder">
-               <h1 className="user_heading">Here are all your existing properties.</h1>
+               <h1 className="user_heading">Here are all your listed properties.</h1>
+               <a href="/properties/create" style={{ padding: '1vw', backgroundColor: 'lightblue', color: 'black', textDecoration: 'none', '&:hover': {
+                  color: 'white'
+               }, height: '10%', margin: '1vw', fontSize: '1vw', border: '1px solid gray'}}>Add Property</a>
                   {agentProperties.map(property => (
                   <div className="user_holder">
+                     <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
                      <Typography className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
                      <Typography className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
-                     <Typography className="user_elements">Price: <Typography className="class_fields">{property.price}</Typography></Typography>
+                     <Typography className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
                      <Typography className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                     <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium"shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
+                     fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties/${property.ID}`, {
+                        method: 'DELETE',
+                        headers: {
+                           "Content-Type": 'application/json',
+                           "Authorization": jwt.token
+                        }
+                     })
+                     .then(status)
+                     .then(json)
+                     .then(data => {
+                        alert("Property Deleted")
+                     })
+                     .catch(errorResponse => {
+                         console.error(errorResponse);
+                     })
+                  }}/></div>
                   </div>
                   ))}
+               
                </div>
             )
+         } else {
+         const property_data = []
+         for (let i=0; i<propertyData.length; i++)
+         {
+            property_data.push(propertyData[i])
+         }
+      return (
+         
+         <div className="user_elements_holder">
+            <h1 className="user_heading">Here are all properties.</h1>
+            {property_data.map(property => (
+                  <div className="user_holder">
+                     <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
+                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                  </div>
+            ))}
+         </div>
+      )
          }
          
       }
       
 
-   }
+   } else {
+      const property_data = []
+         for (let i=0; i<propertyData.length; i++)
+         {
+            property_data.push(propertyData[i])
+         }
       return (
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
-            {propertyData.map(property => (
-               <div className="user_holder">
-                  <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
-                  <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
-                  <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">{property.price}</Typography></Typography>
-                  <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
-               </div>
+            {property_data.map(property => (
+                  <div className="user_holder">
+                     <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
+                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                  </div>
             ))}
          </div>
       )
+   }
+      
 }
 
 

@@ -38,9 +38,15 @@ const bathroomRules = [
 ]
 
 function onTrigger(values) {
-   const jwt = localStorage.getItem('jwt');
-   const payload = decodeJWT(jwt.token);
-   const {...data} = values;
+   let jwt = localStorage.getItem('jwt');
+   if (jwt && jwt !== undefined)
+   {
+      jwt = JSON.parse(jwt);
+      const payload = decodeJWT(jwt.token);
+      const {...data} = values;
+      data.price = Number(data.price)
+      data.bathrooms = Number(data.bathrooms)
+      data.bedrooms = Number(data.bedrooms)
    fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties', {
       method: "POST",
       body: JSON.stringify(data),
@@ -58,6 +64,9 @@ function onTrigger(values) {
    .catch(errorResponse => {
       console.error(errorResponse);
    })
+   }
+   
+   
 }
 
 export default function CreateProperty(props) {
@@ -66,39 +75,44 @@ export default function CreateProperty(props) {
          const payload = decodeJWT(jwt.token)
          if(payload.role == "agent"){
             return (
-            <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
-            <Form.Item hasFeedback {...tailFormItemLayout} name="type" rules={typeRules} label="Type">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="price" rules={priceRules} label="Price">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="address" rules={addressRules} label="Address">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="bedrooms" rules={bedroomsRules} label="Bedrooms">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="bathrooms" rules={bathroomRules} label="Bathrooms">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="agentID" disabled={true}>
-               <Input type="hidden" value={payload.sub}/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="description" label="Description">
-               <Input/>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout} hasFeedback name="imageURL" label="Image URL">
-               <Input/>
-            </Form.Item>
-            <Form.Item hasFeedback {...tailFormItemLayout}>
-               <Button type="primary" htmlType="submit">
-                  Add Property
-               </Button>
-            </Form.Item>
-            </Form>   
+            <div>
+               <Typography style={{ textAlign: 'center', paddingTop: 20 , fontSize: 20, width: '100%'}}>Add a property.</Typography>
+               <Form {...formItemLayout} scrollToFirstError style={{ marginTop: '2vw'}} name="register" onFinish={onTrigger}>
+               <Form.Item hasFeedback {...tailFormItemLayout} name="type" rules={typeRules} label="Type">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="price" rules={priceRules} label="Price">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="address" rules={addressRules} label="Address">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="bedrooms" rules={bedroomsRules} label="Bedrooms">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="bathrooms" rules={bathroomRules} label="Bathrooms">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="description" label="Description">
+                  <Input/>
+               </Form.Item>
+               <Form.Item {...tailFormItemLayout} hasFeedback name="imageURL" label="Image URL">
+                  <Input/>
+               </Form.Item>
+               <Form.Item hasFeedback {...tailFormItemLayout}>
+                  <Button type="primary" htmlType="submit">
+                     Add Property
+                  </Button>
+               </Form.Item>
+               </Form>   
+            </div>
+
          )
-         }
+         }else {
+         return (
+         <Typography className="user_heading">You are not allowed to be on this page!</Typography>
+         )
+   }
          
    } else {
       return (

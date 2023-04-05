@@ -100,12 +100,14 @@ async function deleteProperty(cnx) {
   //first get the id of the article we want to delete
   let id = cnx.params.id
   id = parseInt(id)
-  id = {ID: id};
-  const permission = can.delete(payload, id);
+  const agent = await model.getAgent(id);
+  const agentID = {ID: agent[0].ID}
+  if (agent) {
+    const permission = can.delete(payload, agentID);
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
-    let result = await model.delete(id.ID)
+    let result = await model.delete(id)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been deleted'}
@@ -114,6 +116,8 @@ async function deleteProperty(cnx) {
   } else {
     cnx.status = 403;
   }
+  }
+  
   
 }
 
