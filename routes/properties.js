@@ -122,6 +122,7 @@ async function updateProperty(cnx) {
   agentID = await model.getAgent(id)
   agentID = {ID: agentID[0].ID}
   permission = can.update(payload, agentID);
+  }
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
@@ -147,7 +148,6 @@ async function updateProperty(cnx) {
   }
     }
   }
-  } 
 }
 
 
