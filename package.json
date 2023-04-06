@@ -44,7 +44,7 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/estate-front/"
+      "/estate-front/src"
     ]
   }
 }

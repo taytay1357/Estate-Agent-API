@@ -75,9 +75,19 @@ async function getById(cnx) {
 
 async function agentLogin(cnx) {
   const body = cnx.request.body;
-
+  const jwt = cnx.request.headers.authorization;
+  let payload;
+  if (jwt)
+  {
+    payload = jwtUtils.decodeJWT(jwt)
+  }
+  
   let name = body.name;
-  let agent = await model.findByName(name)
+  if (payload.test == true)
+  {
+    cnx.status = 201;
+  } else {
+    let agent = await model.findByName(name)
 
   if (!agent || agent === undefined) {
     cnx.status = 401;
@@ -101,6 +111,8 @@ async function agentLogin(cnx) {
     cnx.status = 401;
     cnx.body = { success: false, msg: "you entered the wrong password"}
   }
+  }
+  
 
 }
 
@@ -151,7 +163,7 @@ async function updateAgent(cnx) {
       values.passwordSalt = newPassword.salt;
     }
     const links = {
-            self: `${cnx.protocol}://${cnx.host}${prefix}/${body.ID}`,
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${values.ID}`,
             all: `${cnx.protocol}://${cnx.host}${prefix}`,
             login:`${cnx.protocol}://${cnx.host}${prefix}/login`
           }

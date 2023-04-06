@@ -225,7 +225,6 @@ async function deleteUser(cnx) {
   id = parseInt(id)
   const user = {ID: id};
   const permission = can.delete(payload, user);
-  console.log(permission.granted)
   if (!permission.granted || verify != true){
     cnx.status = 403;
   } else {

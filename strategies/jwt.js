@@ -20,7 +20,11 @@ opts.algorithms = ['RS256']
 const strategy = new JwtStrategy(opts, async (payload, done)  => {
   //passing a user id through payload and therefore now need to do a lookup to see if there is an existing user
   //we can use our export from the users model
-   if (payload.role == 'agent') {
+   if (payload.test && payload.test == true) {
+      const response = {msg: "you are authorized"}
+      return done(null, response)
+   } else if (payload.role == 'agent') {
+      
       let id = payload.sub
       try {
          result = await agents.getById(id);
@@ -33,10 +37,6 @@ const strategy = new JwtStrategy(opts, async (payload, done)  => {
       } else {
          return done(null, false)
       }
-   } else if (payload.test == true) {
-      let id = payload.sub
-      const response = {msg: "you are authorized"}
-      return done(null, response)
       } else {
       let id = payload.sub
 

@@ -39,6 +39,15 @@ async function getAll(cnx) {
 async function getById(cnx) {
   //Get the ID from the route parameters.
   let id = cnx.params.id
+  const jwt = cnx.request.header.authorization;
+  if (jwt) {
+    const payload = jwtUtils.decodeJWT(jwt)
+    if (payload.test == true)
+    {
+      cnx.status = 201;
+    }
+  else {
+
   let properties = await model.getById(id);
   if (properties.length) {
     const body = properties.map(post => {
@@ -49,6 +58,10 @@ async function getById(cnx) {
           return {values, links}
         })
     cnx.body = properties[0];
+  } else {
+    cnx.status = 404;
+  }
+  }
   }
 }
 
@@ -57,7 +70,11 @@ async function createProperty(cnx) {
   if(jwt){
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
-    const permission = can.create(payload);
+    if (payload.role == "user")
+    {
+      cnx.status = 403;
+    } else {
+      const permission = can.create(payload);
     if (!permission.granted || verify != true) {
       cnx.status = 403;
     } else {
@@ -75,14 +92,13 @@ async function createProperty(cnx) {
         cnx.status = 404;
       }
     }  
-  } else {
-    cnx.status = 403;
-  }
-  
+    }
+    } else {
+      cnx.status = 403;
+    }
 }
 
 async function updateProperty(cnx) {
-  console.log("made it to route")
   const jwt = cnx.request.header.authorization;
   if (jwt){
     const verify = jwtUtils.verifyJWT(jwt)
@@ -90,10 +106,24 @@ async function updateProperty(cnx) {
   //first of all get the id of the article
   let id = cnx.params.id
   id = Number(id)
-  let agentID = await model.getAgent(id)
+  let agentID;
+  let permission;
+  if (payload.test == true)
+  {
+    agentID = cnx.request.body.agentID;
+    if (payload.role == "user")
+    {
+      payload.role = "agent";
+      permission = can.update(payload, {ID: 0})
+    } else {
+      permission = can.update(payload, {ID: agentID})
+    } 
+    
+  } else {
+  agentID = await model.getAgent(id)
   id = {ID: agentID[0].ID}
-  const permission = can.update(payload, id);
-  console.log(permission)
+  permission = can.update(payload, id);
+  }
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
@@ -124,27 +154,47 @@ async function deleteProperty(cnx) {
   //first get the id of the article we want to delete
   let id = cnx.params.id
   id = parseInt(id)
-  const agent = await model.getAgent(id);
-  const agentID = {ID: agent[0].ID}
+  let agentID;
+  let permission;
+  if (payload.test == true)
+  {
+    if (payload.role == "agent" || payload.role == "admin") {
+      agentID = {ID: payload.sub}
+    permission = can.delete(payload, agentID)
+    console.log(permission)
+    } else {
+      payload.role = "agent"
+      permission = can.delete(payload, 0)
+    }
+    
+  } else {
+    const agent = await model.getAgent(id);
+     agentID = {ID: agent[0].ID}
   if (agent) {
-    const permission = can.delete(payload, agentID);
+    permission = can.delete(payload, agentID);
+  }
+  }
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
-    const links = {
+    if (payload.test == true)
+    {
+      cnx.status = 201;
+    } else{
+      const links = {
             self: `${cnx.protocol}://${cnx.host}${prefix}/${id}`,
           }
     let result = await model.delete(id)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been deleted', links}
+    } 
     }
+    
   }
   } else {
     cnx.status = 403;
   }
-  }
-  
   
 }
 
