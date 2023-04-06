@@ -309,4 +309,5 @@ describe('Login an existing user', () => {
       .set('Authorization', token)
       expect(res.statusCode).toEqual(400)
    })
+
 })

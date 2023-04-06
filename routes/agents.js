@@ -26,7 +26,8 @@ async function getAll(cnx) {
     const verify = jwtUtils.verifyJWT(jwt)
     console.log(verify)
     const payload = jwtUtils.decodeJWT(jwt);
-    const permission = can.readAll(payload);
+    let permission;
+    permission = can.readAll(payload);
     if (!permission.granted || verify != true) {
       cnx.status = 403;
     } else {
