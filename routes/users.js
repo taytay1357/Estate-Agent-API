@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 //we will parse request bodies using koa-bodyparser
-
 const model = require('../models/users');
+const loggingModel = require('../models/logging')
 const bodyParser = require('koa-bodyparser');
 const passwordUtils = require('../helpers/passwordHelpers');
 const jwtUtils = require('../helpers/jsonwebtoken');
@@ -25,8 +25,10 @@ router.post('/login', bodyParser(), validateUserLogin, userLogin)
 async function getAll(cnx) {
   //because of using jwt we need to decrypt the payload and get the admin value
   //of the user to use for authorization
+  const dataObject = {path: prefix, method: 'GET'}
   const jwt = cnx.request.header.authorization;
   if (jwt){
+    dataObject.token = jwt;
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt)
   const permission = can.readAll(payload);
@@ -53,16 +55,19 @@ async function getAll(cnx) {
     cnx.status = 403;
   }
   
-  
+  await loggingModel.logger(dataObject)
   
 }
 async function getById(cnx) {
   //Get the ID from the route parameters.
+  const dataObject = {method: 'GET'}
   const jwt = cnx.request.header.authorization;
   if (jwt){
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
     let id = cnx.params.id
+    dataObject.path = `${prefix}/${id}`
+    dataObject.token = jwt;
     let users = await model.getById(id);
     let permission;
     if (payload.test && payload.test == true) {
@@ -96,11 +101,12 @@ async function getById(cnx) {
   } else {
     cnx.status = 403;
   }
+  await loggingModel.logger(dataObject)
   
   
 }
 async function createUser(cnx) {
-  
+  const dataObject = {path: prefix , method: 'POST'}
   const body = cnx.request.body;
   const saltHash = passwordUtils.genPassword(body.password)
 
@@ -118,21 +124,24 @@ async function createUser(cnx) {
   let result = await model.add(body)
   if (result) {
     const jwt = jwtUtils.issueJWT(result)
+    dataObject.token = jwt.token;
     cnx.body = { success: true, user: result, token: jwt.token, expiresIn: jwt.expires, links}
     cnx.status = 201;
   }  else {
     cnx.body = { success: false, msg: "could not create a user with these credentials" }
     cnx.status = 404;
   }
+  await loggingModel.logger(dataObject)
 }
 
 async function userLogin(cnx) {
-  
+  const dataObject = { path: `${prefix}/login`, method: 'POST'}
   const body = cnx.request.body;
   const jwt = cnx.request.headers.authorization;
   let payload;
     if(jwt && jwt != undefined){
       payload = jwtUtils.decodeJWT(jwt)
+      dataObject.token = jwt;
     } 
   let username = body.username;
   if (payload) {
@@ -165,17 +174,20 @@ async function userLogin(cnx) {
   }
 
   }
-  
+  await loggingModel.logger(dataObject)
 
 }
 
 async function updateUser(cnx) {
+  const dataObject = {method: 'PUT'}
   //first of all get the id of the article
   const jwt = cnx.request.header.authorization;
   if (jwt) {
     const verify = jwtUtils.verifyJWT(jwt)
   const payload = jwtUtils.decodeJWT(jwt);
+  dataObject.token = jwt;
   let id = cnx.params.id
+  dataObject.path = `${prefix}/${id}`
   id = parseInt(id);
   const user = {ID: id};
   let permission;
@@ -215,18 +227,21 @@ async function updateUser(cnx) {
   } else {
     cnx.status = 403;
   }
-  
+  await loggingModel.logger(dataObject)
 }
 
 
 
 async function deleteUser(cnx) {
+  const dataObject = {method: 'DELETE'}
   //first get the id of the article we want to delete
   const jwt = cnx.request.header.authorization;
   if (jwt) {
+    dataObject.token = jwt;
     const verify = jwtUtils.verifyJWT(jwt)
     const payload = jwtUtils.decodeJWT(jwt);
   let id = cnx.params.id
+  dataObject.path = `${prefix}/${id}`
   id = parseInt(id)
   const user = {ID: id};
   const permission = can.delete(payload, user);
@@ -248,6 +263,7 @@ async function deleteUser(cnx) {
   } else {
     cnx.status = 403;
   }
+  await loggingModel.logger(dataObject)
   
 }
 
