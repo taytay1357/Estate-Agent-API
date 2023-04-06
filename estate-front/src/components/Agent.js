@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Typography, Input, Form, Button } from 'antd';
+import { Typography, Input, Form, Button, Image } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
 import { useParams } from 'react-router-dom';
@@ -75,6 +75,7 @@ export default function Agents(props) {
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
                <div className="user_holder">
+                  <div className="image_holder"><Image className="image_user" src={agentData.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
                   <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
@@ -118,6 +119,7 @@ export default function Agents(props) {
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
                <div className="user_holder">
+                  <div className="image_holder"><Image className="image_user" src={agentData.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
                   <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
@@ -134,6 +136,7 @@ export default function Agents(props) {
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
                <div className="user_holder">
+               <div className="image_holder"><Image className="image_user" src={agentData.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
                   <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
@@ -148,6 +151,7 @@ export default function Agents(props) {
          <div className="user_elements_holder">
          <h1 className="user_heading">Welcome to the agent profile page</h1>
                <div className="user_holder">
+               <div className="image_holder"><Image className="image_user" src={agentData.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
                   <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
                   <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>

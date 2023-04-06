@@ -45,26 +45,24 @@ async function getById(cnx) {
     if (payload.test == true)
     {
       cnx.status = 201;
-    }
-  else {
-
-  let properties = await model.getById(id);
-  if (properties.length) {
-    const body = properties.map(post => {
-          const {...values} = post;
-          const links = {
-            self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
-          }
-          return {values, links}
-        })
-    cnx.body = properties[0];
+    } 
   } else {
-    cnx.status = 404;
-  }
-  }
+
+    let properties = await model.getById(id);
+    if (properties.length) {
+      
+      const body = properties.map(post => {
+            const {...values} = post;
+            console.log(values)
+            const links = {
+              self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
+            }
+            return {values, links}
+          })
+      cnx.body = body;
+      }
   }
 }
-
 async function createProperty(cnx) {
   const jwt = cnx.request.header.authorization;
   if(jwt){
@@ -108,9 +106,11 @@ async function updateProperty(cnx) {
   id = Number(id)
   let agentID;
   let permission;
-  if (payload.test == true)
+  if (payload)
   {
-    agentID = cnx.request.body.agentID;
+    if (payload.test == true)
+    {
+      agentID = cnx.request.body.agentID;
     if (payload.role == "user")
     {
       payload.role = "agent";
@@ -118,30 +118,36 @@ async function updateProperty(cnx) {
     } else {
       permission = can.update(payload, {ID: agentID})
     } 
-    
-  } else {
+    }else {
   agentID = await model.getAgent(id)
-  id = {ID: agentID[0].ID}
-  permission = can.update(payload, id);
-  }
+  agentID = {ID: agentID[0].ID}
+  permission = can.update(payload, agentID);
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
     //receive request body and assign it to a new article variable
     let {...values} = cnx.request.body;
+    if (values.bedrooms)
+    {
+      values.bedrooms = parseInt(values.bedrooms)
+    }
+    if (values.bathrooms)
+    {
+      values.bathrooms = parseInt(values.bathrooms)
+    }
+    console.log(values)
     const links = {
             self: `${cnx.protocol}://${cnx.host}${prefix}/${values.ID}`,
           }
-    let result = await model.update(values, id.ID)
+    let result = await model.update(values, id)
     if (result) {
       cnx.status = 201;
       cnx.body = {msg: 'record has been updated', links}
     }
   }
-  } else {
-    cnx.status = 403;
+    }
   }
-  
+  } 
 }
 
 

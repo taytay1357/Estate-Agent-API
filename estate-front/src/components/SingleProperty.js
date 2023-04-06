@@ -59,13 +59,14 @@ export default function SingleProperty(props) {
       fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/properties/${id}`, {
       method: "GET",
       headers: {
-         "Content-Type": "application/json",
+         "Content-Type": "application/json"
       }
    })
    .then(status)
    .then(json)
    .then(data => {
-      setSingleData(data)
+      console.log(data)
+      setSingleData(data[0].values)
       
    })
    .catch(errorResponse => {

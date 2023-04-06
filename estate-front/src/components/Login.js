@@ -51,7 +51,6 @@ function onTrigger(values, setLoggedIn) {
    })
    .catch(errorResponse => {
       console.error(errorResponse);
-      alert(`Error: ${errorResponse}`);
    })
 }
 

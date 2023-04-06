@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Typography, Form, Input, Button } from 'antd';
+import { Typography, Form, Input, Button, Image } from 'antd';
 import getFromLocal from '../front_helper/helper';
 import decodeJWT from '../front_helper/jwt_helper';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -150,6 +150,7 @@ function Users(props) {
          <h1 className="user_heading">Welcome to the user profile page</h1>
             {user_array.map(element => (
                <div className="user_holder">
+                  <div className="image_holder"><Image className="image_user" src={element.values.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">User ID: <Typography className="class_fields">{element.values.ID}</Typography></Typography>
                   <Typography className="user_elements">First Name: <Typography className="class_fields">{element.values.firstName}</Typography></Typography>
                   <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.values.lastName}</Typography></Typography>
@@ -197,13 +198,14 @@ function Users(props) {
             <div className="user_elements_holder">
             {user_array.map(element => (
                <div className="user_holder">
+                  <div className="image_holder"><Image className="image_user" src={element.values.avatarURL} fallback="./profile.jpg"/></div>
                   <Typography className="user_elements">User ID: <Typography className="class_fields">{element.values.ID}</Typography></Typography>
                   <Typography className="user_elements">First Name: <Typography className="class_fields">{element.values.firstName}</Typography></Typography>
                   <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.values.lastName}</Typography></Typography>
                   <Typography className="user_elements">Username: <Typography className="class_fields">{element.values.username}</Typography></Typography>
                   <Typography className="user_elements">Email: <Typography className="class_fields">{element.values.email}</Typography></Typography>
                   <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium"shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
-                     fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${element.ID}`, {
+                     fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${element.values.ID}`, {
                         method: 'DELETE',
                         headers: {
                            "Content-Type": 'application/json',

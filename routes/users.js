@@ -130,10 +130,16 @@ async function userLogin(cnx) {
   
   const body = cnx.request.body;
   const jwt = cnx.request.headers.authorization;
-  const payload = jwtUtils.decodeJWT(jwt)
+  let payload;
+    if(jwt && jwt != undefined){
+      payload = jwtUtils.decodeJWT(jwt)
+    } 
   let username = body.username;
-  if (payload.test == true) {
-    cnx.status = 201;
+  if (payload) {
+    if(payload.test == true)
+    {
+      cnx.status = 201;
+    } 
   } else {
     let user = await model.findByUsername(username)
 
@@ -178,7 +184,6 @@ async function updateUser(cnx) {
   } else {
     permission = can.update(payload, user);
   }
-  
   if (!permission.granted || verify != true){
     cnx.status = 403;
   } else {
@@ -194,7 +199,7 @@ async function updateUser(cnx) {
             self: `${cnx.protocol}://${cnx.host}${prefix}/${values.ID}`,
             login: `${cnx.protocol}://${cnx.host}${prefix}/login`
           }
-    let result = await model.update(values, id.ID)
+    let result = await model.update(values, id)
     if (payload.test && payload.test == true)
     {
       cnx.status = 201;

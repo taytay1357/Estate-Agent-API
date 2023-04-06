@@ -84,9 +84,13 @@ async function agentLogin(cnx) {
   }
   
   let name = body.name;
-  if (payload.test == true)
+  if (payload)
   {
-    cnx.status = 201;
+    if (payload.test == true)
+    {
+      cnx.status = 201;
+    }
+    
   } else {
     let agent = await model.findByName(name)
 
