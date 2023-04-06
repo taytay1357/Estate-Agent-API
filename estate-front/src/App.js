@@ -18,8 +18,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 const { Header, Content, Footer } = Layout;
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
   const [current, setCurrent] = useState('home');
+  const[loggedIn, setLoggedIn] = useState(false)
   if (loggedIn == false) {
     return (
     <Router>

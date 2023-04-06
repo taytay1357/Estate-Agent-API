@@ -17,6 +17,7 @@ const [propertyData, setPropertyData] = useState({});
    .then(json)
    .then(data => {
       setPropertyData(data)
+      console.log(data)
    })
    .catch(errorResponse => {
       console.error(errorResponse);
@@ -30,8 +31,8 @@ const [propertyData, setPropertyData] = useState({});
             const agentProperties = []
             for (let i=0; i<propertyData.length; i++)
             {
-               if (propertyData[i].agentID == payload.sub) {
-                  agentProperties.push(propertyData[i])
+               if (propertyData[i].values.agentID == payload.sub) {
+                  agentProperties.push(propertyData[i].values)
                }
             }
             console.log(agentProperties)
@@ -81,12 +82,12 @@ const [propertyData, setPropertyData] = useState({});
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
             {property_data.map(property => (
-                  <a className="user_holder" href={`/properties/${property.ID}`}>
-                     <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
-                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                  <a className="user_holder" href={`/properties/${property.values.ID}`}>
+                     <div className="image_holder"><Image src={property.values.imageURL} className="property_image" fallback="./house.png" /></div>
+                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.values.ID}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.values.type}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.values.price}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.values.datePublished}</Typography></Typography>
                   </a>
             ))}
          </div>
@@ -107,12 +108,12 @@ const [propertyData, setPropertyData] = useState({});
          <div className="user_elements_holder">
             <h1 className="user_heading">Here are all properties.</h1>
             {property_data.map(property => (
-                  <a className="user_holder" href={`/properties/${property.ID}`}>
-                     <div className="image_holder"><Image src={property.imageURL} className="property_image" fallback="./house.png" /></div>
-                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.ID}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.type}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.price}</Typography></Typography>
-                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.datePublished}</Typography></Typography>
+                  <a className="user_holder" href={`/properties/${property.values.ID}`}>
+                     <div className="image_holder"><Image src={property.values.imageURL} className="property_image" fallback="./house.png" /></div>
+                     <Typography key={property.ID} className="user_elements">Property ID: <Typography className="class_fields">{property.values.ID}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Type: <Typography className="class_fields">{property.values.type}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Price: <Typography className="class_fields">£{property.values.price}</Typography></Typography>
+                     <Typography key={property.ID} className="user_elements">Date Published: <Typography className="class_fields">{property.values.datePublished}</Typography></Typography>
                   </a>
             ))}
          </div>

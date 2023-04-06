@@ -1,3 +1,3 @@
-xit ("Testing to see if jest works", () => {
-   expect(1).toBe(2)
+test('jest should use test db', ()=> {
+   expect(process.env.DB_DATABASE).toBe('test_db')
 })

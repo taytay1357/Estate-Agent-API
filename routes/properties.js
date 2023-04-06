@@ -4,7 +4,8 @@ const Router = require('koa-router')
 const model = require('../models/properties');
 const bodyParser = require('koa-bodyparser')
 const {validateProperty, validateUpdatedProperty} = require('../controllers/validation')
-const router = Router({prefix: '/api/v1/properties'});
+const prefix = '/api/v1/properties'
+const router = Router({prefix: prefix});
 const can = require('../permissions/property');
 const jwtUtils = require('../helpers/jsonwebtoken');
 const auth = require('../controllers/auth');
@@ -21,7 +22,14 @@ router.del('/:id([0-9]{1,})', auth ,deleteProperty);
 async function getAll(cnx) {
   let properties = await model.getAll()
   if (properties.length) {
-    cnx.body = properties;
+    const body = properties.map(post => {
+          const {...values} = post;
+          const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
+          }
+          return {values, links}
+        })
+    cnx.body = body;
     cnx.status = 201;
   } else {
     cnx.status = 404;
@@ -32,9 +40,15 @@ async function getById(cnx) {
   //Get the ID from the route parameters.
   let id = cnx.params.id
   let properties = await model.getById(id);
-  let agent = await model.getAgent(id)
-  if (properties.length && agent.length) {
-    cnx.body = properties[0]
+  if (properties.length) {
+    const body = properties.map(post => {
+          const {...values} = post;
+          const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
+          }
+          return {values, links}
+        })
+    cnx.body = properties[0];
   }
 }
 
@@ -51,8 +65,12 @@ async function createProperty(cnx) {
       body.agentID = payload.sub
       let result = await model.add(body)
       if (result) {
+
+      const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${body.ID}`,
+          }
       cnx.status = 201;
-      cnx.body = {msg: 'property inserted into database'}
+      cnx.body = {msg: 'property inserted into database', links}
       } else {
         cnx.status = 404;
       }
@@ -81,10 +99,13 @@ async function updateProperty(cnx) {
   } else {
     //receive request body and assign it to a new article variable
     let {...values} = cnx.request.body;
+    const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${values.ID}`,
+          }
     let result = await model.update(values, id.ID)
     if (result) {
       cnx.status = 201;
-      cnx.body = {msg: 'record has been updated'}
+      cnx.body = {msg: 'record has been updated', links}
     }
   }
   } else {
@@ -110,10 +131,13 @@ async function deleteProperty(cnx) {
   if (!permission.granted || verify != true) {
     cnx.status = 403;
   } else {
+    const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${id}`,
+          }
     let result = await model.delete(id)
     if (result) {
       cnx.status = 201;
-      cnx.body = {msg: 'record has been deleted'}
+      cnx.body = {msg: 'record has been deleted', links}
     }
   }
   } else {

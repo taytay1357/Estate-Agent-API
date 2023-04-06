@@ -113,6 +113,19 @@ export default function Agents(props) {
          </Form>
          </div>
       ) 
+      } else{
+         return (
+         <div className="user_elements_holder">
+         <h1 className="user_heading">Welcome to the agent profile page</h1>
+               <div className="user_holder">
+                  <Typography className="user_elements">Agent ID: <Typography className="class_fields">{agentData.ID}</Typography></Typography>
+                  <Typography className="user_elements">Name: <Typography className="class_fields">{agentData.name}</Typography></Typography>
+                  <Typography className="user_elements">Location: <Typography className="class_fields">{agentData.location}</Typography></Typography>
+                  <Typography className="user_elements">Telephone: <Typography className="class_fields">{agentData.telephone}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{agentData.email}</Typography></Typography>
+               </div>
+         </div>
+      )
       }
          
       } else {

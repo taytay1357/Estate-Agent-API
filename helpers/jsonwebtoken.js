@@ -17,17 +17,26 @@ const PUB_KEY = fs.readFileSync(__dirname + '/pub_key.pem', 'utf8');
  * @returns {object} the jwt object which contains the jwt itself and when it expires
  */
 function issueJWT(user) {
-   console.log(user)
    const id = user.ID
    let admin;
    const expiresIn = '1d';
-   
-   const payloadObj = {
+   let payloadObj;
+   if (user.test) {
+     payloadObj = {
+      sub: id,
+      role: user.role,
+      iat: Date.now(),
+      test: user.test
+   } 
+   } else {
+      payloadObj = {
       sub: id,
       role: user.role,
       iat: Date.now()
    };
 
+   }   
+   
    const signedJWT = jwt.sign(payloadObj, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256'});
 
    return {

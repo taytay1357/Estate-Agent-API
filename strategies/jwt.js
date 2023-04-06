@@ -33,8 +33,13 @@ const strategy = new JwtStrategy(opts, async (payload, done)  => {
       } else {
          return done(null, false)
       }
-   } else {
+   } else if (payload.test == true) {
       let id = payload.sub
+      const response = {msg: "you are authorized"}
+      return done(null, response)
+      } else {
+      let id = payload.sub
+
       try {
          result = await users.getById(id);
       } catch (error) {

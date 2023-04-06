@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 const {getFromLocal} = require('../front_helper/helper')
 
+
 const formItemLayout = {
 
 labelCol: { xs: { span: 24 }, sm: { span: 6 } },
@@ -31,7 +32,6 @@ const passwordRules = [
 
 
 function onTrigger(values, setLoggedIn) {
-   
    const {confirm, ...data} = values;
    console.log('Received values from form: ', data);
    fetch('https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/login', {

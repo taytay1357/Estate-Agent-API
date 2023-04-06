@@ -15,6 +15,7 @@ const userSchema = require('../schemas/users.json').definitions.user;
 const loginSchema = require('../schemas/login.json').definitions.user;
 const updateUserSchema = require('../schemas/users.json').definitions.userUpdated;
 const v = new Validator();
+const jwtUtils = require('../helpers/jsonwebtoken');
 
 
 /**
@@ -127,7 +128,6 @@ exports.validateUser = async (ctx, next) => {
       throwError: true,
       allowUnknownAttributes: false
    };
-
    const body = ctx.request.body;
     /**
     * Koa middleware handler function to validateUser
@@ -161,15 +161,14 @@ exports.validateUpdatedUser = async (ctx, next) => {
       throwError: true,
       allowUnknownAttributes: false
    };
-
    const body = ctx.request.body;
+   
     /**
     * Koa middleware handler function to validateUser
     * @param {object} ctx - The Koa request/response context tokenObject
     * @param {function} next - The Koa next callback
     * @throws {ValidationError} a jsonschema library exception
     */
-
    try {
       v.validate(body, updateUserSchema, validationOptions);
       await next();
@@ -178,9 +177,12 @@ exports.validateUpdatedUser = async (ctx, next) => {
          ctx.body = error;
          ctx.status = 400;
       } else {
+         ctx.status = 404
          throw error;
       }
    }
+  
+   
 }
 
 /**

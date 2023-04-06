@@ -150,11 +150,11 @@ function Users(props) {
          <h1 className="user_heading">Welcome to the user profile page</h1>
             {user_array.map(element => (
                <div className="user_holder">
-                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
-                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
-                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
-                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
-                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
+                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.values.ID}</Typography></Typography>
+                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.values.firstName}</Typography></Typography>
+                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.values.lastName}</Typography></Typography>
+                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.values.username}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.values.email}</Typography></Typography>
                </div>
             ))}
          <h1 className="user_heading">Update your details...</h1>
@@ -197,11 +197,11 @@ function Users(props) {
             <div className="user_elements_holder">
             {user_array.map(element => (
                <div className="user_holder">
-                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.ID}</Typography></Typography>
-                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.firstName}</Typography></Typography>
-                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.lastName}</Typography></Typography>
-                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.username}</Typography></Typography>
-                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.email}</Typography></Typography>
+                  <Typography className="user_elements">User ID: <Typography className="class_fields">{element.values.ID}</Typography></Typography>
+                  <Typography className="user_elements">First Name: <Typography className="class_fields">{element.values.firstName}</Typography></Typography>
+                  <Typography className="user_elements">Last Name: <Typography className="class_fields">{element.values.lastName}</Typography></Typography>
+                  <Typography className="user_elements">Username: <Typography className="class_fields">{element.values.username}</Typography></Typography>
+                  <Typography className="user_elements">Email: <Typography className="class_fields">{element.values.email}</Typography></Typography>
                   <div style={{ display: 'flex', width: '100%', justifyContent: 'center'}}><Button size="medium"shape="circle" style={{ fontSize: '2vw'}} icon={<DeleteOutlined/>} onClick={ () => {
                      fetch(`https://geminirainbow-sizeemail-5000.codio-box.uk/api/v1/users/${element.ID}`, {
                         method: 'DELETE',

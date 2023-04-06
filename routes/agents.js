@@ -4,13 +4,14 @@ const Router = require('koa-router')
 const model = require('../models/agents');
 const bodyParser = require('koa-bodyparser');
 const {validateAgent, validateAgentLogin, validateUpdatedAgent} = require('../controllers/validation')
-const router = Router({prefix: '/api/v1/agents'});
+const prefix = '/api/v1/agents'
+const router = Router({prefix: prefix});
 const jwtUtils = require('../helpers/jsonwebtoken');
 const can = require('../permissions/agents');
 const passwordUtils = require('../helpers/passwordHelpers');
 const auth = require('../controllers/auth');
 
-router.get('/', auth ,getAll);
+router.get('/', auth , getAll);
 router.post('/', bodyParser(), validateAgent ,createAgent);
 router.post('/login', bodyParser(), validateAgentLogin, agentLogin)
 router.get('/:id([0-9]{1,})', getById);
@@ -31,7 +32,15 @@ async function getAll(cnx) {
     } else {
       let agents = await model.getAll()
       if (agents.length) {
-        cnx.body = agents;
+        const body = agents.map(post => {
+          const {...values} = post;
+          const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
+            login: `${cnx.protocol}://${cnx.host}${prefix}/login`
+          }
+          return {values, links}
+        })
+        cnx.body = body;
         cnx.status = 201;
       } else {
         cnx.status = 404;
@@ -46,10 +55,19 @@ async function getById(cnx) {
   //Get the ID from the route parameters.
   let id = cnx.params.id
   let agents = await model.getById(id);
-  console.log("HERE",agents)
   if (agents.length) {
+          const body = agents.map(post => {
+          const {...values} = post;
+          const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${post.ID}`,
+            login: `${cnx.protocol}://${cnx.host}${prefix}/login`,
+            all: `${cnx.protocol}://${cnx.host}${prefix}`
+          }
+          return {values, links}
+        })
     cnx.body = agents[0];
     cnx.status = 201;
+
   } else {
     cnx.status = 404;
   }
@@ -65,15 +83,20 @@ async function agentLogin(cnx) {
     cnx.status = 401;
     cnx.body = { success: false, msg: "could not find agent"}
   }
+  
 
   agent = agent[0]
+  const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${agent.ID}`,
+            all: `${cnx.protocol}://${cnx.host}${prefix}`
+          }
   const isValid = passwordUtils.validPassword(body.password, agent.password, agent.passwordSalt);
 
   if (isValid) {
     const tokenObject = jwtUtils.issueJWT(agent);
 
     cnx.status = 201;
-    cnx.body = { success: true, agent: agent, token: tokenObject.token, expiresIn: tokenObject.expires }
+    cnx.body = { success: true, agent: agent, token: tokenObject.token, expiresIn: tokenObject.expires, links }
   } else {
     cnx.status = 401;
     cnx.body = { success: false, msg: "you entered the wrong password"}
@@ -90,12 +113,16 @@ async function createAgent(cnx) {
 
   body.password = hash;
   body.passwordSalt = salt;
-
+  const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${body.ID}`,
+            all: `${cnx.protocol}://${cnx.host}${prefix}`,
+            login:`${cnx.protocol}://${cnx.host}${prefix}/login`
+          }
   let result = await model.add(body)
   if (result) {
     const jwt = jwtUtils.issueJWT(result);
     cnx.status = 201;
-    cnx.body = {success: true, agent: body, token: jwt.token, expiresIn: jwt.expires}
+    cnx.body = {success: true, agent: body, token: jwt.token, expiresIn: jwt.expires, links}
   } else {
     cnx.body = {success: false, msg: 'could not create an agent with these credentials'}
     cnx.status = 404;
@@ -123,10 +150,15 @@ async function updateAgent(cnx) {
       values.password = newPassword.hash;
       values.passwordSalt = newPassword.salt;
     }
+    const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${body.ID}`,
+            all: `${cnx.protocol}://${cnx.host}${prefix}`,
+            login:`${cnx.protocol}://${cnx.host}${prefix}/login`
+          }
     let result = await model.update(values, id.ID)
     if (result) {
       cnx.status = 201;
-      cnx.body = {msg: 'record has been updated'}
+      cnx.body = {msg: 'record has been updated', links}
     } else {
       cnx.status = 404;
     }
@@ -153,9 +185,14 @@ async function deleteAgent(cnx) {
     cnx.status = 403;
   } else {
     let result = await model.delete(id)
+    const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${body.ID}`,
+            all: `${cnx.protocol}://${cnx.host}${prefix}`,
+            login:`${cnx.protocol}://${cnx.host}${prefix}/login`
+          }
     if (result) {
       cnx.status = 201;
-      cnx.body = {msg: 'record has been deleted'}
+      cnx.body = {msg: 'record has been deleted', links}
     } else {
       cnx.status = 404;
     }

@@ -130,10 +130,10 @@ export default function SingleProperty(props) {
                <h1 className="user_heading">Here is the property information.</h1>
                   <div className="property_single_holder">
                      <Image className="image_single" src={singleData.imageURL} fallback="./house.png"/>
-                     <Typography>"{singleData.description}"</Typography>
+                     <Typography className="single_description">"{singleData.description}"</Typography>
                      <Typography className="single_info">Type: {singleData.type}</Typography>
-                     <Typography>Bedrooms: {singleData.bedrooms}</Typography>
-                     <Typography>Bathrooms: {singleData.bathrooms}</Typography>
+                     <Typography className="single_info">Bedrooms: {singleData.bedrooms}</Typography>
+                     <Typography className="single_info">Bathrooms: {singleData.bathrooms}</Typography>
                      <Typography className="single_info">Address: {singleData.address}</Typography>
                      <Typography className="single_info">Date Published: {singleData.datePublished}</Typography>
                   <h1 className="agent_heading"><a href={`/agents/${singleData.agentID}`}>Agent Information</a></h1>
